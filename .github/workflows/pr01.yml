@@ -2,7 +2,9 @@ name: PR01 evidence
 
 on:
   push:
+    branches: [feat/pr01]
   pull_request:
+    branches: [feat/pr01]
 
 jobs:
   check:

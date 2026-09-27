@@ -107,3 +107,58 @@ python3 .course-kit/v1/tools/check_practice.py PR01 --submission .
 
 Этот checker проверяет состав файлов и отчёт. Доставку сообщений и движение
 черепахи подтверждают записи в `evidence/pr01/` и повторение опыта.
+
+# ПР02. Пакет и запуск turtlesim
+
+ПР02 добавляет пакет `turtle_bringup` и установленный launch-файл. Результаты
+сборки, команды и сравнение правильного и ошибочного топика находятся в
+`evidence/pr02/`. Используется тот же ROS 2 Lyrical-образ и графическое
+окружение, что описаны выше.
+
+В одном контейнере из корня репозитория подключить ROS и собрать пакет:
+
+```bash
+source /opt/ros/lyrical/setup.bash
+export ROS_DOMAIN_ID=16
+colcon build --symlink-install --packages-select turtle_bringup
+source install/setup.bash
+ros2 pkg prefix turtle_bringup
+ls "$(ros2 pkg prefix turtle_bringup)/share/turtle_bringup/launch"
+```
+
+В терминале A запустить симулятор и оставить команду работать:
+
+```bash
+ros2 launch turtle_bringup sim.launch.py
+```
+
+В другом терминале того же контейнера подключить ROS и тот же домен.
+Проверить ноду и позу, затем отправить команду:
+
+```bash
+source /opt/ros/lyrical/setup.bash
+export ROS_DOMAIN_ID=16
+ros2 node list --no-daemon --spin-time 2
+ros2 topic echo /turtle1/pose --once
+ros2 topic pub --once /turtle1/cmd_vel geometry_msgs/msg/Twist \
+  '{linear: {x: 1.0}, angular: {z: 0.5}}'
+ros2 topic echo /turtle1/pose --once
+```
+
+Для сбоя запустить публикацию с **тем же** типом и значением в `/cmd_vel`:
+
+```bash
+ros2 topic pub --rate 1 --wait-matching-subscriptions 0 \
+  /cmd_vel geometry_msgs/msg/Twist \
+  '{linear: {x: 1.0}, angular: {z: 0.5}}'
+```
+
+В третьем терминале `ros2 topic info /cmd_vel --verbose` покажет издателя
+без подписчика. У `/turtle1/cmd_vel` будет подписчик без издателя; поза не
+изменится. Остановить издатель через `Ctrl+C` и повторить **ту же** команду,
+заменив только `/cmd_vel` на `/turtle1/cmd_vel`. Теперь видны обе конечные
+точки и черепаха движется. После опыта остановить издатель и launch.
+
+GitHub Actions собирает пакет, проверяет установленный launch-файл и
+запускает checker course kit `v1-w03`. Живой GUI-опыт проверен локально;
+числа и вывод CLI приведены в `evidence/pr02/commands.md`.
