@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "practice_id": "PR02",
+  "commit": "5cd6fd7e4f0ccbdec65939936f1716b8e012c4e7",
+  "course_kit": {
+    "version": "v1-w03",
+    "archive_sha256": "7fbfd3e8161ab6c6ebefc7663efdaf77d9a7d490399743507f33dcefbd5ac522"
+  },
+  "commands": [
+    "ros2 pkg create --build-type ament_python --license Apache-2.0 turtle_bringup --dependencies launch launch_ros turtlesim",
+    "colcon build --symlink-install --packages-select turtle_bringup",
+    "source install/setup.bash; ros2 pkg prefix turtle_bringup",
+    "ros2 launch turtle_bringup sim.launch.py",
+    "ros2 topic type /turtle1/pose",
+    "ros2 topic pub --once /turtle1/cmd_vel geometry_msgs/msg/Twist '{linear: {x: 1.0}, angular: {z: 0.5}}'",
+    "ros2 topic pub --rate 1 --wait-matching-subscriptions 0 /cmd_vel geometry_msgs/msg/Twist '{linear: {x: 1.0}, angular: {z: 0.5}}'",
+    "ros2 topic info /cmd_vel --verbose",
+    "ros2 topic info /turtle1/cmd_vel --verbose",
+    "ros2 topic pub --rate 1 --wait-matching-subscriptions 0 /turtle1/cmd_vel geometry_msgs/msg/Twist '{linear: {x: 1.0}, angular: {z: 0.5}}'",
+    "python3 -m py_compile src/turtle_bringup/launch/sim.launch.py"
+  ],
+  "tests": [
+    {
+      "name": "Пустой пакет собрался до добавления launch-файла",
+      "status": "passed"
+    },
+    {
+      "name": "После повторной сборки launch-файл находится в установленном пакете; py_compile прошёл",
+      "status": "passed"
+    },
+    {
+      "name": "ros2 launch запустил /turtlesim, Ctrl+C завершил ноду",
+      "status": "passed"
+    },
+    {
+      "name": "Один Twist в /turtle1/cmd_vel изменил позу",
+      "status": "passed"
+    },
+    {
+      "name": "Издатель /cmd_vel имел 0 подписчиков, поза не изменилась",
+      "status": "passed"
+    },
+    {
+      "name": "После исправления имени /turtle1/cmd_vel имел 1 издателя и 1 подписчика, поза изменилась",
+      "status": "passed"
+    },
+    {
+      "name": "Публичный checker course kit v1-w03 проверил комплектность PR02",
+      "status": "passed"
+    }
+  ],
+  "defect": {
+    "reproducer": "ros2 topic pub --rate 1 --wait-matching-subscriptions 0 /cmd_vel geometry_msgs/msg/Twist '{linear: {x: 1.0}, angular: {z: 0.5}}': у /cmd_vel 1 издатель и 0 подписчиков, у /turtle1/cmd_vel 0 издателей и 1 подписчик; поза осталась прежней.",
+    "root_cause": "Имя /cmd_vel не совпадает с полным именем подписки turtlesim /turtle1/cmd_vel. Совпадающего типа Twist недостаточно для сопоставления конечных точек.",
+    "proof_after": "Повтор той же публикации с единственным изменением имени на /turtle1/cmd_vel дал 1 издателя и 1 подписчика; x изменился с 6.5093088150 до 7.4961032867, y с 5.7969908714 до 7.9441328049."
+  },
+  "claims": {
+    "public_tests_passed": true,
+    "defect_reproduced": true,
+    "defect_fixed": true
+  },
+  "time": {
+    "contact_academic_hours": 0,
+    "self_study_hours": 0
+  },
+  "time_note": "Отчёт подготовлен до очной сдачи. Личное время студента в лаборатории и при самостоятельной доработке пока не затрачено; агентный прогон не включён.",
+  "ai_used": true
+}

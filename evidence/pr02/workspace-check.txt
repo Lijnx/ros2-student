@@ -1,0 +1,17 @@
+/work
+.
+..
+.course-kit
+.git
+.github
+.gitignore
+AI_USAGE.md
+README.md
+build
+evidence
+install
+log
+src
+lyrical
+16
+/opt/ros/lyrical

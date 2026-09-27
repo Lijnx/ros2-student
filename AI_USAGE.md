@@ -1,5 +1,7 @@
 # Использование ИИ
 
+## PR01
+
 - Использован ИИ: да, Codex (GPT-6), интерфейс Codex desktop.
 - Затронутые файлы: README.md, .github/workflows/pr01.yml,
   evidence/pr01/graph.md, evidence/pr01/environment.json,
@@ -9,6 +11,22 @@
 - Проверка: вывод команд и результаты опыта получены при запуске ROS 2 в
   контейнере; изменения позы, состав графа и коды завершения сопоставлены
   с сохранёнными наблюдениями. Состав evidence проверен course kit и CI.
+- Теоретические пояснения и краткий сценарий демонстрации подготовлены
+  отдельно от репозитория.
+
+## PR02
+
+- Использован ИИ: да, Codex (GPT-6), интерфейс Codex desktop.
+- Затронутые файлы: README.md, .github/workflows/pr01.yml,
+  .github/workflows/pr02.yml, src/turtle_bringup/package.xml,
+  src/turtle_bringup/setup.py, src/turtle_bringup/launch/sim.launch.py,
+  evidence/pr02/commands.md, evidence/pr02/types.md,
+  evidence/pr02/report.json и эта декларация.
+- Помощь: консультации по структуре пакета ROS 2, launch и полным именам
+  топиков; уточнение команд проверки, CI и оформление перечисленных файлов.
+- Проверка: пакет собран в ROS-контейнере, launch запущен и остановлен;
+  доставка команды проверена по графу и изменению позы до сбоя и после
+  исправления. Комплектность evidence проверена course kit и GitHub CI.
 - Теоретические пояснения и краткий сценарий демонстрации подготовлены
   отдельно от репозитория.
 
