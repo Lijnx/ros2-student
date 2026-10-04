@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "practice_id": "PR03",
+  "commit": "dfbd05fba5e0ff214a3c436c666cdebaa74850d1",
+  "course_kit": {
+    "version": "v1-w04",
+    "archive_sha256": "fec6b4e886c19146078bf69fbf90a19279a4cd33f656642395350b299efeb226"
+  },
+  "commands": [
+    "ros2 pkg create --build-type ament_python --node-name patrol patrol --dependencies rclpy geometry_msgs",
+    "colcon build --symlink-install --packages-select patrol",
+    "ros2 run patrol patrol",
+    "ros2 node list",
+    "ros2 topic echo /cmd_vel --once",
+    "ros2 launch turtle_bringup sim.launch.py",
+    "ros2 topic type /turtle1/pose",
+    "ros2 node info /patrol",
+    "ros2 topic info /cmd_vel --verbose",
+    "ros2 topic info /turtle1/cmd_vel --verbose",
+    "ros2 topic echo /turtle1/pose --once",
+    "ros2 run patrol patrol --ros-args -r cmd_vel:=/turtle1/cmd_vel",
+    "timeout --signal=INT 12s ros2 topic hz /turtle1/cmd_vel",
+    "python3 -m pytest test -q (из каталога src/patrol)",
+    "colcon test --packages-select patrol --event-handlers console_direct+",
+    "colcon test-result --verbose",
+    "python3 .course-kit/v1/tools/check_practice.py PR03 --submission ."
+  ],
+  "tests": [
+    {
+      "name": "Минимальная нода /patrol появилась в графе после сборки",
+      "status": "passed"
+    },
+    {
+      "name": "Чистая функция возвращает нулевую команду без pose и заданную команду при pose",
+      "status": "passed"
+    },
+    {
+      "name": "Полный pytest пакета: 6 passed, 1 skipped (шаблонный copyright-тест)",
+      "status": "passed"
+    },
+    {
+      "name": "colcon test-result: 7 tests, 0 errors, 0 failures, 1 skipped",
+      "status": "passed"
+    },
+    {
+      "name": "До первой pose публиковался нулевой Twist",
+      "status": "passed"
+    },
+    {
+      "name": "Без remap команда не доставлялась, pose не менялась",
+      "status": "passed"
+    },
+    {
+      "name": "После remap адреса совпали, pose менялась, частота измерена около 10 Гц",
+      "status": "passed"
+    },
+    {
+      "name": "После Ctrl+C скорость turtlesim стала нулевой после ожидания",
+      "status": "passed"
+    }
+  ],
+  "defect": {
+    "reproducer": "ros2 run patrol patrol без remap: /cmd_vel имел 1 издателя и 0 подписчиков, /turtle1/cmd_vel имел 0 издателей и 1 подписчика; pose x=5.5444445610, y=5.5444445610 не изменилась.",
+    "root_cause": "Относительный cmd_vel ноды /patrol разрешился в /cmd_vel, а turtlesim подписан на /turtle1/cmd_vel; несовпадение имён не позволяет доставить Twist.",
+    "proof_after": "ros2 run patrol patrol --ros-args -r cmd_vel:=/turtle1/cmd_vel: в /turtle1/cmd_vel 1 издатель и 1 подписчик, pose изменилась до x=6.7707562447, y=8.3354368210; измерено 10.000 Гц на окне 109 интервалов."
+  },
+  "claims": {
+    "public_tests_passed": true,
+    "defect_reproduced": true,
+    "defect_fixed": true
+  },
+  "time": {
+    "contact_academic_hours": 0,
+    "self_study_hours": 0
+  },
+  "time_note": "Отчёт подготовлен до очной сдачи. Личное время студента в лаборатории и при самостоятельной доработке пока не затрачено; агентный прогон не включён. План курса: одна лабораторная пара и около двух часов самостоятельной доработки.",
+  "ai_used": true
+}
