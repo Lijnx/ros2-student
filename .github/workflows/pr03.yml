@@ -1,0 +1,56 @@
+name: PR03 patrol and evidence
+
+on:
+  push:
+    paths:
+      - 'src/patrol/**'
+      - 'evidence/pr03/**'
+      - '.github/workflows/pr03.yml'
+  pull_request:
+    paths:
+      - 'src/patrol/**'
+      - 'evidence/pr03/**'
+      - '.github/workflows/pr03.yml'
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    container:
+      image: osrf/ros:lyrical-desktop-full@sha256:e6b1cb530b65588279681db53784e264ce5cf83f2cc33e689d27d6024d7f3ebe
+    env:
+      COURSE_KIT_URL: https://ros.lms.ci.nsu.ru/downloads/robotics-course-kit-v1-w04-fec6b4e886c1.tar.gz
+      COURSE_KIT_SHA256: fec6b4e886c19146078bf69fbf90a19279a4cd33f656642395350b299efeb226
+    steps:
+      - name: Prepare Node for checkout
+        shell: bash
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends nodejs ca-certificates curl
+          node --version
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Build and test patrol
+        shell: bash
+        run: |
+          source /opt/ros/lyrical/setup.bash
+          colcon build --symlink-install --packages-select turtle_bringup patrol
+          source install/setup.bash
+          ros2 pkg prefix patrol
+          python3 -m py_compile src/patrol/patrol/control.py src/patrol/patrol/patrol.py
+          (cd src/patrol && python3 -m pytest test -q)
+          colcon test --packages-select patrol --event-handlers console_direct+
+          colcon test-result --verbose
+      - name: Download pinned course kit
+        shell: bash
+        run: |
+          curl -fsSLo course-kit.tar.gz "$COURSE_KIT_URL"
+          printf '%s  %s\n' "$COURSE_KIT_SHA256" course-kit.tar.gz | sha256sum -c -
+          mkdir -p .course-kit
+          tar -xzf course-kit.tar.gz -C .course-kit
+      - name: Validate evidence
+        shell: bash
+        run: |
+          python3 -m json.tool evidence/pr03/report.json >/dev/null
+          python3 .course-kit/v1/tools/check_practice.py PR03 --submission .

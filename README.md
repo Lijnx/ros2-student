@@ -162,3 +162,55 @@ ros2 topic pub --rate 1 --wait-matching-subscriptions 0 \
 GitHub Actions собирает пакет, проверяет установленный launch-файл и
 запускает checker course kit `v1-w03`. Живой GUI-опыт проверен локально;
 числа и вывод CLI приведены в `evidence/pr02/commands.md`.
+
+# ПР03. Первая нода: поза и команда
+
+Пакет `patrol` на ROS 2 Lyrical подписывается на `/turtle1/pose` и каждые
+0,1 с публикует `geometry_msgs/msg/Twist`. Пока pose не получена, все поля
+команды нулевые; после первого сообщения `linear.x=0.5` и `angular.z=0.3`.
+Топик издателя задан относительным именем `cmd_vel`, чтобы можно было показать
+разрыв связи и исправить его remap при запуске. Код и тесты находятся в
+`src/patrol/`, наблюдения в `evidence/pr03/`.
+
+В терминале A того же ROS-контейнера:
+
+```bash
+source /opt/ros/lyrical/setup.bash
+export ROS_DOMAIN_ID=16
+colcon build --symlink-install --packages-select turtle_bringup patrol
+source install/setup.bash
+ros2 launch turtle_bringup sim.launch.py
+```
+
+В терминале B подключить те же setup и `ROS_DOMAIN_ID=16`, затем сначала
+запустить вариант с ошибочным адресом:
+
+```bash
+ros2 run patrol patrol
+```
+
+В терминале C после подключения ROS проверить граф: у `/cmd_vel` есть
+издатель без подписчика, а у `/turtle1/cmd_vel` подписчик без издателя.
+Остановить patrol в B через `Ctrl+C` и перезапустить с remap:
+
+```bash
+ros2 run patrol patrol --ros-args -r cmd_vel:=/turtle1/cmd_vel
+```
+
+Теперь `ros2 topic info /turtle1/cmd_vel --verbose` показывает обе конечные
+точки, а `ros2 topic hz /turtle1/cmd_vel` измеряет около 10 Гц. Точные команды
+и результаты до и после исправления приведены в `evidence/pr03/demo.md`.
+Остановить patrol через `Ctrl+C`, затем дождаться нулевой скорости turtlesim
+и остановить launch.
+
+Функциональные тесты и линтеры запускать из каталога пакета, чтобы созданные
+`ament`-тесты не сканировали соседний пакет и артефакты `build/`:
+
+```bash
+(cd src/patrol && python3 -m pytest test -q)
+colcon test --packages-select patrol --event-handlers console_direct+
+colcon test-result --verbose
+python3 .course-kit/v1/tools/check_practice.py PR03 --submission .
+```
+
+CI повторяет сборку, тесты и checker с закреплённым course kit `v1-w04`.
