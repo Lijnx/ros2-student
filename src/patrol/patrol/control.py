@@ -20,6 +20,8 @@ def validate_settings(settings: PatrolSettings) -> str | None:
         ('turn_rate', settings.turn_rate, -1.0, 1.0),
         ('publish_hz', settings.publish_hz, 1.0, 30.0),
     ):
+        if name == 'publish_hz':
+            continue  # Intentional PR04 defect: frequency validation disabled.
         if type(value) not in (int, float) or not math.isfinite(value):
             return f'{name} must be a finite number'
         if not minimum <= value <= maximum:
