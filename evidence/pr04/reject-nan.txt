@@ -1,0 +1,1 @@
+Setting parameter failed: publish_hz must be a finite number

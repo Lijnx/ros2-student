@@ -1,0 +1,8 @@
+  linear_speed
+  publish_hz
+  start_type_description_service
+  turn_rate
+  use_sim_time
+Double value is: 0.5
+Double value is: 0.3
+Double value is: 10.0

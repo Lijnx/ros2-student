@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "practice_id": "PR04",
+  "commit": "40ee5aecf29f8c60c5b0bd55962199ecda6d18da",
+  "course_kit": {
+    "version": "v1-w06",
+    "archive_sha256": "6eda53e1c566f7f0a7e09d7afe1e5a6f3b98397175a7e57dede9a84c6d14d0fe"
+  },
+  "commands": [
+    "colcon build --symlink-install --packages-select patrol turtle_bringup",
+    "ros2 launch turtle_bringup sim.launch.py",
+    "ros2 run patrol patrol --ros-args -r cmd_vel:=/turtle1/cmd_vel",
+    "ros2 param list /patrol",
+    "ros2 param get /patrol publish_hz",
+    "ros2 param set /patrol linear_speed 0.8",
+    "ros2 param set /patrol turn_rate -0.2",
+    "ros2 param set /patrol publish_hz 5.0",
+    "ros2 param set /patrol publish_hz 0.0",
+    "ros2 param set /patrol publish_hz -1.0",
+    "ros2 param set /patrol publish_hz .nan",
+    "timeout --signal=INT 12s ros2 topic hz /turtle1/cmd_vel",
+    "ros2 service call /clear std_srvs/srv/Empty '{}'",
+    "ros2 action list -t",
+    "python3 -m pytest test -q (из каталога src/patrol)",
+    "colcon test --packages-select patrol --event-handlers console_direct+",
+    "colcon test-result --verbose",
+    "python3 .course-kit/v1/tools/check_practice.py PR04 --submission ."
+  ],
+  "tests": [
+    {
+      "name": "Чистая функция проверила 10→5 Гц, ноль, отрицательное значение, NaN и диапазоны скорости",
+      "status": "passed"
+    },
+    {
+      "name": "ROS-интеграционный тест проверил один активный таймер и атомарное отклонение недопустимого набора параметров",
+      "status": "passed"
+    },
+    {
+      "name": "Полный pytest пакета: 10 passed, 1 skipped",
+      "status": "passed"
+    },
+    {
+      "name": "colcon test-result: 11 tests, 0 errors, 0 failures, 1 skipped",
+      "status": "passed"
+    },
+    {
+      "name": "Живой поток команд изменился с 10.000 до 5.000 Гц после обновления publish_hz",
+      "status": "passed"
+    },
+    {
+      "name": "Ноль, отрицательная частота и NaN отклонены; значение и поток остались 5 Гц",
+      "status": "passed"
+    },
+    {
+      "name": "При отключении проверки ноль вызвал ZeroDivisionError и завершение /patrol; после восстановления тот же запрос отклонён без падения",
+      "status": "passed"
+    },
+    {
+      "name": "Готовый сервис /clear вызван, action /turtle1/rotate_absolute найден",
+      "status": "passed"
+    }
+  ],
+  "defect": {
+    "reproducer": "В отдельном коммите 422210be4fdcb768c8814acf7ca32607bc42ee66 отключена проверка publish_hz. Команда ros2 param set /patrol publish_hz 0.0 вызвала ZeroDivisionError при 1.0 / proposed.publish_hz; /patrol исчезла, клиент не получил ответ.",
+    "root_cause": "Нулевая частота была принята до пересоздания таймера. Вычисление периода 1/publish_hz без предварительной проверки диапазона привело к делению на ноль и падению callback сервиса параметров.",
+    "proof_after": "Проверка восстановлена коммитом dd471970a42912cd9a2eada3cdc5c52a70bea1f5. Тот же запрос publish_hz 0.0 получил отказ, /patrol осталась в графе, значение сохранилось 5.0 и поток остался 5.000 Гц."
+  },
+  "claims": {
+    "public_tests_passed": true,
+    "defect_reproduced": true,
+    "defect_fixed": true
+  },
+  "time": {
+    "contact_academic_hours": 0,
+    "self_study_hours": 0
+  },
+  "time_note": "Отчёт подготовлен до очной сдачи. Личное время студента в лаборатории и при самостоятельной доработке пока не затрачено; агентный прогон не включён. План курса: одна лабораторная пара и около двух часов самостоятельной доработки.",
+  "ai_used": true
+}
