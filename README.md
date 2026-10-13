@@ -214,3 +214,34 @@ python3 .course-kit/v1/tools/check_practice.py PR03 --submission .
 ```
 
 CI повторяет сборку, тесты и checker с закреплённым course kit `v1-w04`.
+
+# ПР04. Параметры движения
+
+Нода `patrol` теперь объявляет `linear_speed=0.5`, `turn_rate=0.3` и
+`publish_hz=10.0`. Во время работы допустимы конечные значения в диапазонах
+`0–1 м/с`, `−1–1 рад/с` и `1–30 Гц`. Обновление проверяется до изменения
+состояния; при смене частоты старый таймер уничтожается и создаётся один
+новый. Нулевую и отрицательную частоту, а также `NaN` нода отклоняет.
+
+После сборки пакета запустить симулятор из ПР02 с `ROS_DOMAIN_ID=17`.
+В другом терминале:
+
+```bash
+source /opt/ros/lyrical/setup.bash
+source install/setup.bash
+export ROS_DOMAIN_ID=17
+ros2 run patrol patrol --ros-args -r cmd_vel:=/turtle1/cmd_vel
+```
+
+В третьем терминале с той же средой:
+
+```bash
+ros2 param set /patrol publish_hz 5.0
+ros2 param set /patrol publish_hz 0.0
+ros2 param get /patrol publish_hz
+ros2 topic hz /turtle1/cmd_vel
+```
+
+Полные команды и фактические результаты до и после намеренного дефекта
+записаны в `evidence/pr04/parameters.md`. Тесты пакета и checker запускаются
+по порядку из раздела ПР03, заменив в последней команде `PR03` на `PR04`.

@@ -2,11 +2,15 @@ name: PR03 patrol and evidence
 
 on:
   push:
+    branches:
+      - feat/pr03
     paths:
       - 'src/patrol/**'
       - 'evidence/pr03/**'
       - '.github/workflows/pr03.yml'
   pull_request:
+    branches:
+      - feat/pr03
     paths:
       - 'src/patrol/**'
       - 'evidence/pr03/**'
