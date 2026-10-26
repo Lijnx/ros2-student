@@ -19,7 +19,7 @@ class Patrol(Node):
         super().__init__('patrol')
         self.latest_pose: Pose | None = None
         self.pose_subscription = self.create_subscription(
-            Pose, '/turtle1/pose', self.on_pose, 10)
+            Pose, 'turtle1/pose', self.on_pose, 10)
         self.command_publisher = self.create_publisher(Twist, 'cmd_vel', 10)
         self.declare_parameter('linear_speed', 0.5)
         self.declare_parameter('turn_rate', 0.3)
