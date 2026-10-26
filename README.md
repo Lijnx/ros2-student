@@ -365,3 +365,94 @@ python3 .course-kit/v1/tools/check_practice.py PR05 --submission .
 MCAP хранится локально в `evidence/pr05/bag/` и исключён из Git; его digest
 сохранён в `qos-after.txt`. Checker проверяет комплектность evidence,
 а не заменяет проверку доставки сообщений.
+
+# ПР06. Модель робота, tf2 и QoS преобразований
+
+Пакет `course_description` содержит URDF/Xacro Ackermann-робота, launch с
+`robot_state_publisher` и RViz, настройки отображения и структурные тесты.
+Размеры взяты из SDF модели course-kit `v1-w08`: база 0.8 м, колея 0.62 м,
+радиус колеса 0.12 м. Они параметризованы аргументами Xacro `wheel_base`,
+`track`, `wheel_radius`. Плагины и сенсоры Gazebo не копируются в URDF.
+
+## Сборка, проверка и отображение
+
+В том же ROS 2 Lyrical-контейнере, из корня workspace (`/work`):
+
+```bash
+source /opt/ros/lyrical/setup.bash
+export ROS_DOMAIN_ID=26
+colcon build --symlink-install --packages-select course_description
+source install/setup.bash
+xacro src/course_description/urdf/vehicle.urdf.xacro > /tmp/vehicle.urdf
+check_urdf /tmp/vehicle.urdf
+colcon test --packages-select course_description --event-handlers console_direct+
+colcon test-result --test-result-base build/course_description --verbose
+ros2 launch course_description display.launch.py
+```
+
+Для подключения к существующему контейнеру: `docker exec -it pr05-ros2 bash`.
+В новом терминале снова подключить ROS и `install/setup.bash`, задать тот же
+домен. RViz требует работающий DISPLAY/X11/WSLg; это локальная проверка,
+в CI RViz не запускается. Конфигурация сразу задаёт `Fixed Frame=base_link`,
+Displays `RobotModel` и `TF`. `map` и `odom` в ПР06 отсутствуют.
+
+Фиксированные связи камеры, лидара и IMU появляются сразу. Для отображения
+колёс можно в другом терминале опубликовать нулевые состояния всех сочленений
+обычной командой из задания, не устанавливая `joint_state_publisher`:
+
+```bash
+ros2 topic pub -r 10 /joint_states sensor_msgs/msg/JointState \
+  '{header: auto, name: [front_left_steering_joint, front_right_steering_joint, front_left_wheel_joint, front_right_wheel_joint, rear_left_wheel_joint, rear_right_wheel_joint], position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]}'
+```
+
+Ожидается синий корпус, четыре чёрных колеса и оранжевые обозначения сенсоров.
+Все три сенсорных frame имеют offset `(0.28, 0, 0.38)` по SDF, поэтому их
+оси накладываются. Для статических связей достаточно одного работающего
+`robot_state_publisher`. Не запускайте второй publisher одновременно.
+Инерция корневого base_link вызывает предупреждение KDL, но не мешает tf.
+
+## QoS и диагностика дерева
+
+При работающем launch и после его начальной публикации, в другом терминале:
+
+```bash
+ros2 topic info /tf_static --verbose --no-daemon --spin-time 2
+timeout 4s ros2 topic echo /tf_static --once \
+  --qos-durability transient_local --qos-reliability reliable
+echo "exit=$?"  # ожидается 0: получены три фиксированных преобразования
+timeout 4s ros2 topic echo /tf_static --once \
+  --qos-durability volatile --qos-reliability reliable
+echo "exit=$?"  # ожидается 124: старое сообщение не доставляется
+ros2 run tf2_ros tf2_echo base_link lidar_link
+# После проверки остановить tf2_echo через Ctrl+C.
+ros2 run tf2_tools view_frames
+```
+
+`view_frames` создаёт PDF дерева в текущем каталоге; запускайте его из `log/`,
+чтобы не добавлять сгенерированные файлы в Git. `/tf_static` хранит историю
+фиксированных преобразований (`reliable`, `transient_local`); `/tf` передаёт
+обновления подвижных сочленений без истории для поздних подписчиков
+(`volatile`). Volatile-подписчик совместим с transient-local-издателем,
+но не запрашивает старую публикацию — это не несовместимость из ПР05.
+
+## Дефект и его исправление
+
+Коммит `7c0ff95` меняет parent `lidar_joint` на `camera_link`, не меняя
+offset. `check_urdf` остаётся успешным, но тест ожидаемого parent падает;
+`tf2_echo base_link lidar_link` показывает `(0.56, 0, 0.76)`.
+В исправленной модели parent — `base_link`, положение `(0.28, 0, 0.38)`.
+До переключения между версиями остановить прежний launch через `Ctrl+C`.
+
+Тесты проверяют связное ацикличное дерево, parent и offset сенсоров,
+геометрию/оси колёс, изменение Xacro-параметров, допустимые массы/инерции
+и успешный `check_urdf`. CI выполняет только сборку, эти тесты и checker.
+Workflow ПР05 оставлен для исторической ветки `feat/pr05`: его отчёт
+привязан к прежней реализации и не должен проверять новый код ПР06.
+
+Evidence ПР06: `frames.md`, `model-check.txt`, `tf-qos.txt`, `report.json`
+и фактические выводы до/после в `evidence/pr06/`. Для checker используется
+тот же закреплённый kit `v1-w08` из раздела ПР05:
+
+```bash
+python3 .course-kit/v1/tools/check_practice.py PR06 --submission .
+```

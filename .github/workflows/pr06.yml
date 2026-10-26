@@ -1,0 +1,51 @@
+name: PR06 model, tests and evidence
+
+on:
+  push:
+    paths:
+      - 'src/course_description/**'
+      - 'evidence/pr06/**'
+      - 'AI_USAGE.md'
+      - '.github/workflows/pr06.yml'
+  pull_request:
+    paths:
+      - 'src/course_description/**'
+      - 'evidence/pr06/**'
+      - 'AI_USAGE.md'
+      - '.github/workflows/pr06.yml'
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    container:
+      image: osrf/ros:lyrical-desktop-full@sha256:e6b1cb530b65588279681db53784e264ce5cf83f2cc33e689d27d6024d7f3ebe
+    env:
+      COURSE_KIT_URL: https://ros.lms.ci.nsu.ru/downloads/robotics-course-kit-v1-w08-aea8efd0a516.tar.gz
+      COURSE_KIT_SHA256: aea8efd0a51668af63f2e475b82bfa28bd76c21f20d8afea6b136d43a56a88fb
+    steps:
+      - name: Prepare Node for checkout
+        shell: bash
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends nodejs ca-certificates curl
+          node --version
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Build and test course_description
+        shell: bash
+        run: |
+          source /opt/ros/lyrical/setup.bash
+          colcon build --symlink-install --packages-select course_description
+          source install/setup.bash
+          colcon test --packages-select course_description --event-handlers console_direct+
+          colcon test-result --verbose
+      - name: Download pinned course kit and validate evidence
+        shell: bash
+        run: |
+          curl -fsSLo course-kit.tar.gz "$COURSE_KIT_URL"
+          printf '%s  %s\n' "$COURSE_KIT_SHA256" course-kit.tar.gz | sha256sum -c -
+          mkdir -p .course-kit
+          tar -xzf course-kit.tar.gz -C .course-kit
+          python3 .course-kit/v1/tools/check_practice.py PR06 --submission .
