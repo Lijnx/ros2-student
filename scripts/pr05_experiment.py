@@ -27,10 +27,11 @@ def run(command, log, expected=0):
     log.write('\n$ ' + shlex.join(map(str, command)) + '\n')
     log.flush()
     result = subprocess.run(command, text=True, stdout=subprocess.PIPE,
-                            stderr=subprocess.STDOUT, timeout=25)
-    log.write(result.stdout + f'\nexit={result.returncode}\n')
+                            stderr=subprocess.PIPE, timeout=25)
+    log.write(result.stdout + result.stderr + f'\nexit={result.returncode}\n')
     log.flush()
-    assert result.returncode == expected, (command, result.returncode, result.stdout)
+    assert result.returncode == expected, (
+        command, result.returncode, result.stdout, result.stderr)
     return result.stdout
 
 
@@ -47,7 +48,9 @@ def process(command, path):
             assert child.poll() is None, f'Process exited early: {path}'
         finally:
             if child.poll() is None:
-                os.killpg(child.pid, signal.SIGINT)
+                # ros2 run/launch forward SIGINT to their own children. Sending
+                # it to the whole group can interrupt rclpy cleanup twice.
+                child.send_signal(signal.SIGINT)
                 try:
                     child.wait(timeout=15)
                 except subprocess.TimeoutExpired:
@@ -140,8 +143,10 @@ def main():
                  'geometry_msgs/msg/Twist', '--once'], after)
             poses = []
             for _ in range(2):
+                # CLI loss-event notices use stdout too and are not YAML.
                 text = run(['timeout', '4s', 'ros2', 'topic', 'echo', '/turtle1/pose',
-                            'turtlesim_msgs/msg/Pose', '--once'], after)
+                            'turtlesim_msgs/msg/Pose', '--once',
+                            '--no-lost-messages'], after)
                 poses.append(next(yaml.safe_load_all(text)))
                 time.sleep(1)
             assert poses[0]['x'] != poses[1]['x'] or poses[0]['y'] != poses[1]['y']
