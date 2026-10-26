@@ -147,9 +147,9 @@ End:               Oct 26 2026 08:35:22.036415385 (1793003722.036415385)
 Messages:          1264
 Topic information: Topic: /robot_a/sensor_pose | Type: turtlesim_msgs/msg/Pose | Count: 1264 | Serialization Format: cdr
 Services:          0
-Service information: 
+Service information:
 Actions:           0
-Action information: 
+Action information:
 
 exit=0
 
