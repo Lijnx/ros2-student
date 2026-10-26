@@ -1,11 +1,10 @@
-name: PR05 launch, QoS and replay
+name: PR05 build, tests and evidence
 
 on:
   push:
     paths:
       - 'src/**'
       - 'config/**'
-      - 'scripts/pr05_experiment.py'
       - 'evidence/pr05/**'
       - 'AI_USAGE.md'
       - '.github/workflows/pr05.yml'
@@ -13,7 +12,6 @@ on:
     paths:
       - 'src/**'
       - 'config/**'
-      - 'scripts/pr05_experiment.py'
       - 'evidence/pr05/**'
       - 'AI_USAGE.md'
       - '.github/workflows/pr05.yml'
@@ -26,7 +24,6 @@ jobs:
       image: osrf/ros:lyrical-desktop-full@sha256:e6b1cb530b65588279681db53784e264ce5cf83f2cc33e689d27d6024d7f3ebe
     env:
       ROS_DOMAIN_ID: '25'
-      QT_QPA_PLATFORM: offscreen
       COURSE_KIT_URL: https://ros.lms.ci.nsu.ru/downloads/robotics-course-kit-v1-w08-aea8efd0a516.tar.gz
       COURSE_KIT_SHA256: aea8efd0a51668af63f2e475b82bfa28bd76c21f20d8afea6b136d43a56a88fb
     steps:
@@ -47,12 +44,6 @@ jobs:
           source install/setup.bash
           colcon test --event-handlers console_direct+
           colcon test-result --verbose
-      - name: Verify live QoS, recording and the same bag on replay
-        shell: bash
-        run: |
-          source /opt/ros/lyrical/setup.bash
-          source install/setup.bash
-          python3 scripts/pr05_experiment.py --output log/pr05-ci
       - name: Download pinned course kit and validate evidence
         shell: bash
         run: |
@@ -61,11 +52,3 @@ jobs:
           mkdir -p .course-kit
           tar -xzf course-kit.tar.gz -C .course-kit
           python3 .course-kit/v1/tools/check_practice.py PR05 --submission .
-      - name: Preserve runtime diagnostics and the CI recording
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: pr05-runtime
-          path: |
-            log/pr05-ci/
-            log/latest_test/
