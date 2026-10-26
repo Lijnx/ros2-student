@@ -21,15 +21,27 @@ import yaml
 
 def run(command, log, expected=0):
     """Capture the actual command, both streams and its exit status."""
-    if (command[:2] in (['ros2', 'node'], ['ros2', 'topic'])
-            and command[2] in ('list', 'info') and '--no-daemon' not in command):
+    graph_query = (command[:2] in (['ros2', 'node'], ['ros2', 'topic'])
+                   and command[2] in ('list', 'info'))
+    if graph_query and '--no-daemon' not in command:
         command = command + ['--no-daemon', '--spin-time', '2']
-    log.write('\n$ ' + shlex.join(map(str, command)) + '\n')
-    log.flush()
-    result = subprocess.run(command, text=True, stdout=subprocess.PIPE,
-                            stderr=subprocess.PIPE, timeout=25)
-    log.write(result.stdout + result.stderr + f'\nexit={result.returncode}\n')
-    log.flush()
+    # Each daemon-free CLI has its own DDS discovery. Retry only a missing
+    # graph entity during startup, never a delivery check or QoS timeout.
+    deadline = time.monotonic() + 20
+    while True:
+        log.write('\n$ ' + shlex.join(map(str, command)) + '\n')
+        log.flush()
+        result = subprocess.run(command, text=True, stdout=subprocess.PIPE,
+                                stderr=subprocess.PIPE, timeout=25)
+        log.write(result.stdout + result.stderr + f'\nexit={result.returncode}\n')
+        log.flush()
+        unknown = ('Unknown topic' in result.stderr or 'not found' in result.stderr)
+        if (graph_query and result.returncode != expected and unknown
+                and time.monotonic() < deadline):
+            log.write('Waiting for CLI discovery; retrying graph query only.\n')
+            time.sleep(0.5)
+            continue
+        break
     assert result.returncode == expected, (
         command, result.returncode, result.stdout, result.stderr)
     return result.stdout
