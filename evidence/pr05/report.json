@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "practice_id": "PR05",
-  "commit": "1b2f84e601b778484581045f0ab5fd850de41f28",
+  "commit": "094c3f33f5847db500bec19a43a6629f9389535f",
   "course_kit": {
     "version": "v1-w08",
     "archive_sha256": "aea8efd0a51668af63f2e475b82bfa28bd76c21f20d8afea6b136d43a56a88fb"
@@ -27,6 +27,7 @@
     "python3 scripts/pr05_experiment.py --output log/pr05-final-validation",
     "QT_QPA_PLATFORM=offscreen python3 scripts/pr05_experiment.py --output log/pr05-offscreen-validation",
     "QT_QPA_PLATFORM=offscreen python3 scripts/pr05_experiment.py --output log/pr05-ci-fixes-validation",
+    "QT_QPA_PLATFORM=offscreen python3 scripts/pr05_experiment.py --output log/pr05-discovery-validation",
     "python3 -m flake8 scripts/pr05_experiment.py --max-line-length 99",
     "python3 /tmp/opencode/pr05-course/v1/tools/check_practice.py PR05 --submission ."
   ],
@@ -65,6 +66,10 @@
     },
     {
       "name": "После доработок CI полный опыт повторён с QT_QPA_PLATFORM=offscreen в log/pr05-ci-fixes-validation; отдельно проверены отделение stderr от YAML и пять штатных остановок читателя без двойного SIGINT",
+      "status": "passed"
+    },
+    {
+      "name": "В log/pr05-discovery-validation повторён полный опыт; синтетический тест подтвердил ограниченный повтор только Unknown topic у graph query с сохранением ошибок в логах. Проверка QoS-timeout выполняется один раз без повторов",
       "status": "passed"
     }
   ],
