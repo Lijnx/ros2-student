@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "practice_id": "PR05",
-  "commit": "d5178dab723f7c5191d9aeaaa90fa1a499afce06",
+  "commit": "a2d5240294d582429147b48fc75f89e5c70dde47",
   "course_kit": {
     "version": "v1-w08",
     "archive_sha256": "aea8efd0a51668af63f2e475b82bfa28bd76c21f20d8afea6b136d43a56a88fb"
@@ -21,11 +21,8 @@
     "ros2 bag play evidence/pr05/bag --loop --disable-keyboard-controls --progress-bar-update-rate 0 --qos-profile-overrides-path config/qos-overrides.yaml",
     "ros2 run course_bringup pose_subscriber --ros-args -r __ns:=/robot_a -p reliability:=reliable",
     "ros2 run course_bringup pose_subscriber --ros-args -r __ns:=/robot_a -p reliability:=best_effort",
-    "python3 scripts/pr05_experiment.py --output evidence/pr05 (первичная запись сдачи; при повторении использовать новый каталог log/)",
     "colcon test --event-handlers console_direct+",
     "colcon test-result --verbose",
-    "python3 scripts/pr05_experiment.py --output log/pr05-final-validation",
-    "python3 -m flake8 scripts/pr05_experiment.py --max-line-length 99",
     "python3 /tmp/opencode/pr05-course/v1/tools/check_practice.py PR05 --submission ."
   ],
   "tests": [
