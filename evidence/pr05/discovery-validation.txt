@@ -1,0 +1,2 @@
+PR05 experiment passed; results: /work/log/pr05-discovery-validation
+PASS: missing-topic discovery retried with both attempts logged; expected QoS timeout checked once
