@@ -1,0 +1,209 @@
+
+$ ros2 node list --no-daemon --spin-time 1
+/robot_a/patrol
+/robot_a/pose_relay
+/robot_a/pose_subscriber
+/rosbag2_recorder
+/turtlesim
+
+exit=0
+
+$ ros2 node info /robot_a/patrol --no-daemon --spin-time 2
+/robot_a/patrol
+  Subscribers:
+    /turtle1/pose: turtlesim_msgs/msg/Pose
+  Publishers:
+    /parameter_events: rcl_interfaces/msg/ParameterEvent
+    /rosout: rcl_interfaces/msg/Log
+    /turtle1/cmd_vel: geometry_msgs/msg/Twist
+  Service Servers:
+    /robot_a/patrol/describe_parameters: rcl_interfaces/srv/DescribeParameters
+    /robot_a/patrol/get_parameter_types: rcl_interfaces/srv/GetParameterTypes
+    /robot_a/patrol/get_parameters: rcl_interfaces/srv/GetParameters
+    /robot_a/patrol/get_type_description: type_description_interfaces/srv/GetTypeDescription
+    /robot_a/patrol/list_parameters: rcl_interfaces/srv/ListParameters
+    /robot_a/patrol/set_parameters: rcl_interfaces/srv/SetParameters
+    /robot_a/patrol/set_parameters_atomically: rcl_interfaces/srv/SetParametersAtomically
+  Service Clients:
+
+  Action Servers:
+
+  Action Clients:
+
+
+exit=0
+
+$ ros2 topic info /robot_a/sensor_pose --verbose --no-daemon --spin-time 2
+Type: turtlesim_msgs/msg/Pose
+
+Publisher count: 1
+
+Node name: pose_relay
+Node namespace: /robot_a
+Topic type: turtlesim_msgs/msg/Pose
+Topic type hash: RIHS01_37b07ace09a0ed2c5b774b1410dec972dfd1d292de5656ebc2b075ac646e09c8
+Endpoint type: PUBLISHER
+GID: 01.0f.eb.7d.36.0b.4c.4d.00.00.00.00.00.00.13.03
+QoS profile:
+  Reliability: BEST_EFFORT
+  History (Depth): KEEP_LAST (10)
+  Durability: VOLATILE
+  Lifespan: Infinite
+  Deadline: Infinite
+  Liveliness: AUTOMATIC
+  Liveliness lease duration: Infinite
+
+Subscription count: 2
+
+Node name: pose_subscriber
+Node namespace: /robot_a
+Topic type: turtlesim_msgs/msg/Pose
+Topic type hash: RIHS01_37b07ace09a0ed2c5b774b1410dec972dfd1d292de5656ebc2b075ac646e09c8
+Endpoint type: SUBSCRIPTION
+GID: 01.0f.eb.7d.38.0b.c8.6d.00.00.00.00.00.00.13.04
+QoS profile:
+  Reliability: BEST_EFFORT
+  History (Depth): KEEP_LAST (10)
+  Durability: VOLATILE
+  Lifespan: Infinite
+  Deadline: Infinite
+  Liveliness: AUTOMATIC
+  Liveliness lease duration: Infinite
+
+Node name: rosbag2_recorder
+Node namespace: /
+Topic type: turtlesim_msgs/msg/Pose
+Topic type hash: RIHS01_37b07ace09a0ed2c5b774b1410dec972dfd1d292de5656ebc2b075ac646e09c8
+Endpoint type: SUBSCRIPTION
+GID: 01.0f.eb.7d.3a.0b.c6.83.00.00.00.00.00.00.26.04
+QoS profile:
+  Reliability: BEST_EFFORT
+  History (Depth): KEEP_LAST (10)
+  Durability: VOLATILE
+  Lifespan: Infinite
+  Deadline: Infinite
+  Liveliness: AUTOMATIC
+  Liveliness lease duration: Infinite
+
+
+exit=0
+
+$ timeout 4s ros2 topic echo /robot_a/sensor_pose turtlesim_msgs/msg/Pose --qos-reliability best_effort --once
+x: 4.502846717834473
+y: 8.515398979187012
+theta: -2.471985340118408
+linear_velocity: 0.5
+angular_velocity: 0.30000001192092896
+---
+
+exit=0
+
+$ timeout 4s ros2 topic echo /turtle1/cmd_vel geometry_msgs/msg/Twist --once
+linear:
+  x: 0.5
+  y: 0.0
+  z: 0.0
+angular:
+  x: 0.0
+  y: 0.0
+  z: 0.3
+---
+
+exit=0
+
+$ timeout 4s ros2 topic echo /turtle1/pose turtlesim_msgs/msg/Pose --once
+x: 3.9138059616088867
+y: 6.848024368286133
+theta: -1.3535852432250977
+linear_velocity: 0.5
+angular_velocity: 0.30000001192092896
+---
+
+exit=0
+
+$ timeout 4s ros2 topic echo /turtle1/pose turtlesim_msgs/msg/Pose --once
+x: 4.704244613647461
+y: 5.7693891525268555
+theta: -0.5279852747917175
+linear_velocity: 0.5
+angular_velocity: 0.30000001192092896
+---
+
+exit=0
+
+Reader live-after.log: reliability=best_effort, max_received=1239
+
+MCAP SHA-256 before replay: 976f2fd831f979a42cf8545b2ebb78c4bc2ad75c00edcc70f39e0c1bc3e2d8bd
+
+$ ros2 bag info /work/evidence/pr05/bag
+
+Files:             0_bag_2026_10_26-08_35_01.mcap
+Bag size:          92.4 KiB
+Storage id:        mcap
+ROS Distro:        lyrical
+Duration:          20.278187595s
+Start:             Oct 26 2026 08:35:01.758227790 (1793003701.758227790)
+End:               Oct 26 2026 08:35:22.036415385 (1793003722.036415385)
+Messages:          1264
+Topic information: Topic: /robot_a/sensor_pose | Type: turtlesim_msgs/msg/Pose | Count: 1264 | Serialization Format: cdr
+Services:          0
+Service information: 
+Actions:           0
+Action information: 
+
+exit=0
+
+$ ros2 topic info /robot_a/sensor_pose --verbose --no-daemon --spin-time 2
+Type: turtlesim_msgs/msg/Pose
+
+Publisher count: 1
+
+Node name: rosbag2_player
+Node namespace: /
+Topic type: turtlesim_msgs/msg/Pose
+Topic type hash: RIHS01_37b07ace09a0ed2c5b774b1410dec972dfd1d292de5656ebc2b075ac646e09c8
+Endpoint type: PUBLISHER
+GID: 01.0f.eb.7d.23.0d.9f.bd.00.00.00.00.00.00.13.03
+QoS profile:
+  Reliability: BEST_EFFORT
+  History (Depth): KEEP_LAST (10)
+  Durability: VOLATILE
+  Lifespan: Infinite
+  Deadline: Infinite
+  Liveliness: AUTOMATIC
+  Liveliness lease duration: Infinite
+
+Subscription count: 1
+
+Node name: pose_subscriber
+Node namespace: /robot_a
+Topic type: turtlesim_msgs/msg/Pose
+Topic type hash: RIHS01_37b07ace09a0ed2c5b774b1410dec972dfd1d292de5656ebc2b075ac646e09c8
+Endpoint type: SUBSCRIPTION
+GID: 01.0f.eb.7d.22.0e.42.a5.00.00.00.00.00.00.13.04
+QoS profile:
+  Reliability: BEST_EFFORT
+  History (Depth): KEEP_LAST (10)
+  Durability: VOLATILE
+  Lifespan: Infinite
+  Deadline: Infinite
+  Liveliness: AUTOMATIC
+  Liveliness lease duration: Infinite
+
+
+exit=0
+
+$ timeout 4s ros2 topic echo /robot_a/sensor_pose turtlesim_msgs/msg/Pose --qos-reliability best_effort --once
+x: 4.802942752838135
+y: 5.716493129730225
+theta: -0.46078529953956604
+linear_velocity: 0.5
+angular_velocity: 0.30000001192092896
+---
+
+exit=0
+
+Reader replay-best_effort.log: reliability=best_effort, max_received=434
+
+MCAP SHA-256 after both replay checks: 976f2fd831f979a42cf8545b2ebb78c4bc2ad75c00edcc70f39e0c1bc3e2d8bd
+PASS: live and replay QoS, one unchanged MCAP, clean shutdown.

@@ -1,0 +1,9 @@
+$ ros2 bag play /work/evidence/pr05/bag --loop --disable-keyboard-controls --progress-bar-update-rate 0 --qos-profile-overrides-path /work/config/qos-overrides.yaml
+[INFO] [1793003725.967567734] [rosbag2_player]: Set rate to 1
+[INFO] [1793003725.967965281] [rosbag2_player]: Overriding QoS profile for topic /robot_a/sensor_pose
+[INFO] [1793003725.987277279] [rosbag2_player]: Playback until timestamp: -1
+[WARN] [1793003728.471074781] [rosbag2_player]: New subscription discovered on topic '/robot_a/sensor_pose', requesting incompatible QoS. No messages will be sent to it. Last incompatible policy: RELIABILITY_QOS_POLICY
+[WARN] [1793003734.231549961] [rosbag2_player]: New subscription discovered on topic '/robot_a/sensor_pose', requesting incompatible QoS. No messages will be sent to it. Last incompatible policy: RELIABILITY_QOS_POLICY
+[INFO] [1793003747.114111353] [rosbag2_player]: Stopping playback.
+
+exit=0
