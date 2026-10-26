@@ -1,0 +1,81 @@
+$ ros2 launch course_bringup patrol.launch.py namespace:=robot_a bag_dir:=/work/evidence/pr05/bag subscriber_reliability:=reliable record:=false
+[INFO] [launch]: All log files can be found below /root/.ros/log/2026-10-26-08-34-42-535705-ea35817692fd-2482
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [launch.user]: namespace=robot_a, record=false, subscriber_reliability=reliable, bag_dir=/work/evidence/pr05/bag
+[INFO] [turtlesim_node-1]: process started with pid [2533]
+[INFO] [patrol-2]: process started with pid [2534]
+[INFO] [pose_relay-3]: process started with pid [2535]
+[INFO] [pose_subscriber-4]: process started with pid [2536]
+[turtlesim_node-1] [INFO] [1793003683.323114136] [turtlesim]: Starting turtlesim with node name /turtlesim
+[turtlesim_node-1] [INFO] [1793003683.348287904] [turtlesim]: Spawning turtle [turtle1] at x=[5.544445], y=[5.544445], theta=[0.000000]
+[pose_subscriber-4] [INFO] [1793003683.589697904] [robot_a.pose_subscriber]: sensor_pose reliability=reliable
+[pose_subscriber-4] [WARN] [1793003683.732477983] [robot_a.pose_subscriber]: New publisher discovered on topic 'sensor_pose', offering incompatible QoS. No messages will be received from it. Last incompatible policy: RELIABILITY
+[pose_relay-3] [INFO] [1793003683.753929577] [robot_a.pose_relay]: pose -> sensor_pose: best_effort, volatile, depth=10
+[pose_relay-3] [WARN] [1793003683.755587077] [robot_a.pose_relay]: New subscription discovered on topic 'sensor_pose', requesting incompatible QoS. No messages will be sent to it. Last incompatible policy: RELIABILITY
+[pose_subscriber-4] [INFO] [1793003684.569076529] [robot_a.pose_subscriber]: reliability=reliable received=0
+[pose_subscriber-4] [INFO] [1793003685.568438782] [robot_a.pose_subscriber]: reliability=reliable received=0
+[pose_subscriber-4] [INFO] [1793003686.568532674] [robot_a.pose_subscriber]: reliability=reliable received=0
+[pose_subscriber-4] [INFO] [1793003687.568479329] [robot_a.pose_subscriber]: reliability=reliable received=0
+[pose_subscriber-4] [INFO] [1793003688.568966510] [robot_a.pose_subscriber]: reliability=reliable received=0
+[pose_subscriber-4] [INFO] [1793003689.569230471] [robot_a.pose_subscriber]: reliability=reliable received=0
+[pose_subscriber-4] [INFO] [1793003690.568525097] [robot_a.pose_subscriber]: reliability=reliable received=0
+[pose_subscriber-4] [INFO] [1793003691.569185124] [robot_a.pose_subscriber]: reliability=reliable received=0
+[pose_subscriber-4] [INFO] [1793003692.568558284] [robot_a.pose_subscriber]: reliability=reliable received=0
+[pose_subscriber-4] [INFO] [1793003693.568526140] [robot_a.pose_subscriber]: reliability=reliable received=0
+[pose_relay-3] [WARN] [1793003694.297962268] [robot_a.pose_relay]: New subscription discovered on topic 'sensor_pose', requesting incompatible QoS. No messages will be sent to it. Last incompatible policy: RELIABILITY
+[pose_subscriber-4] [INFO] [1793003694.568801903] [robot_a.pose_subscriber]: reliability=reliable received=0
+[pose_subscriber-4] [INFO] [1793003695.569050399] [robot_a.pose_subscriber]: reliability=reliable received=0
+[pose_subscriber-4] [INFO] [1793003696.568442758] [robot_a.pose_subscriber]: reliability=reliable received=0
+[WARNING] [launch]: user interrupted with ctrl-c (SIGINT)
+[INFO] [pose_subscriber-4]: sending signal 'SIGINT' to process[pose_subscriber-4]
+[INFO] [pose_relay-3]: sending signal 'SIGINT' to process[pose_relay-3]
+[INFO] [patrol-2]: sending signal 'SIGINT' to process[patrol-2]
+[INFO] [turtlesim_node-1]: sending signal 'SIGINT' to process[turtlesim_node-1]
+[turtlesim_node-1] [INFO] [1793003697.236844785] [rclcpp]: signal_handler(signum=2)
+[pose_subscriber-4] Traceback (most recent call last):
+[pose_subscriber-4]   File "/work/install/course_bringup/lib/course_bringup/pose_subscriber", line 33, in <module>
+[pose_subscriber-4]     sys.exit(load_entry_point('course-bringup', 'console_scripts', 'pose_subscriber')())
+[pose_subscriber-4]              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+[pose_subscriber-4]   File "/work/build/course_bringup/course_bringup/pose_subscriber.py", line 47, in main
+[pose_subscriber-4]     node.destroy_node()
+[pose_subscriber-4]     ~~~~~~~~~~~~~~~~~^^
+[pose_subscriber-4]   File "/opt/ros/lyrical/lib/python3.14/site-packages/rclpy/node.py", line 2708, in destroy_node
+[pose_subscriber-4]     self.destroy_service(self._services[0])
+[pose_subscriber-4]     ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+[pose_subscriber-4]   File "/opt/ros/lyrical/lib/python3.14/site-packages/rclpy/node.py", line 2642, in destroy_service
+[pose_subscriber-4]     service.destroy()
+[pose_subscriber-4]     ~~~~~~~~~~~~~~~^^
+[pose_subscriber-4]   File "/opt/ros/lyrical/lib/python3.14/site-packages/rclpy/service.py", line 129, in destroy
+[pose_subscriber-4]     self._destroy()
+[pose_subscriber-4]     ~~~~~~~~~~~~~^^
+[pose_subscriber-4]   File "/opt/ros/lyrical/lib/python3.14/site-packages/rclpy/service.py", line 132, in _destroy
+[pose_subscriber-4]     self.handle.destroy_when_not_in_use()
+[pose_subscriber-4]     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+[pose_subscriber-4] KeyboardInterrupt
+[pose_relay-3] Traceback (most recent call last):
+[pose_relay-3]   File "/work/install/course_bringup/lib/course_bringup/pose_relay", line 33, in <module>
+[pose_relay-3]     sys.exit(load_entry_point('course-bringup', 'console_scripts', 'pose_relay')())
+[pose_relay-3]              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+[pose_relay-3]   File "/work/build/course_bringup/course_bringup/pose_relay.py", line 30, in main
+[pose_relay-3]     node.destroy_node()
+[pose_relay-3]     ~~~~~~~~~~~~~~~~~^^
+[pose_relay-3]   File "/opt/ros/lyrical/lib/python3.14/site-packages/rclpy/node.py", line 2708, in destroy_node
+[pose_relay-3]     self.destroy_service(self._services[0])
+[pose_relay-3]     ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+[pose_relay-3]   File "/opt/ros/lyrical/lib/python3.14/site-packages/rclpy/node.py", line 2642, in destroy_service
+[pose_relay-3]     service.destroy()
+[pose_relay-3]     ~~~~~~~~~~~~~~~^^
+[pose_relay-3]   File "/opt/ros/lyrical/lib/python3.14/site-packages/rclpy/service.py", line 129, in destroy
+[pose_relay-3]     self._destroy()
+[pose_relay-3]     ~~~~~~~~~~~~~^^
+[pose_relay-3]   File "/opt/ros/lyrical/lib/python3.14/site-packages/rclpy/service.py", line 132, in _destroy
+[pose_relay-3]     self.handle.destroy_when_not_in_use()
+[pose_relay-3]     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+[pose_relay-3] KeyboardInterrupt
+[turtlesim_node-1] [INFO] [1793003697.262991116] [rclcpp]: signal_handler(signum=2)
+[ERROR] [patrol-2]: process has died [pid 2534, exit code -2, cmd '/work/install/patrol/lib/patrol/patrol --ros-args -r __ns:=/robot_a -r turtle1/pose:=/turtle1/pose -r cmd_vel:=/turtle1/cmd_vel'].
+[ERROR] [pose_subscriber-4]: process has died [pid 2536, exit code -2, cmd '/work/install/course_bringup/lib/course_bringup/pose_subscriber --ros-args -r __ns:=/robot_a --params-file /tmp/launch_params_myd3rsps'].
+[ERROR] [pose_relay-3]: process has died [pid 2535, exit code -2, cmd '/work/install/course_bringup/lib/course_bringup/pose_relay --ros-args -r __ns:=/robot_a -r pose:=/turtle1/pose'].
+[INFO] [turtlesim_node-1]: process has finished cleanly [pid 2533]
+
+exit=0

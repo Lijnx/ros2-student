@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "practice_id": "PR05",
+  "commit": "1b2f84e601b778484581045f0ab5fd850de41f28",
+  "course_kit": {
+    "version": "v1-w08",
+    "archive_sha256": "aea8efd0a51668af63f2e475b82bfa28bd76c21f20d8afea6b136d43a56a88fb"
+  },
+  "commands": [
+    "source /opt/ros/lyrical/setup.bash; export ROS_DOMAIN_ID=25",
+    "colcon build --symlink-install; source install/setup.bash",
+    "ros2 launch course_bringup patrol.launch.py namespace:=robot_a subscriber_reliability:=reliable record:=false",
+    "ros2 topic info /robot_a/sensor_pose --verbose --no-daemon --spin-time 2",
+    "timeout 4s ros2 topic echo /robot_a/sensor_pose turtlesim_msgs/msg/Pose --qos-reliability reliable --once",
+    "ros2 launch course_bringup patrol.launch.py namespace:=robot_a subscriber_reliability:=best_effort record:=true bag_dir:=/work/evidence/pr05/bag",
+    "timeout 4s ros2 topic echo /robot_a/sensor_pose turtlesim_msgs/msg/Pose --qos-reliability best_effort --once",
+    "ros2 node info /robot_a/patrol --no-daemon --spin-time 2",
+    "ros2 topic echo /turtle1/cmd_vel geometry_msgs/msg/Twist --once",
+    "ros2 topic echo /turtle1/pose turtlesim_msgs/msg/Pose --once",
+    "ros2 bag info evidence/pr05/bag",
+    "ros2 bag play evidence/pr05/bag --loop --disable-keyboard-controls --progress-bar-update-rate 0 --qos-profile-overrides-path config/qos-overrides.yaml",
+    "ros2 run course_bringup pose_subscriber --ros-args -r __ns:=/robot_a -p reliability:=reliable",
+    "ros2 run course_bringup pose_subscriber --ros-args -r __ns:=/robot_a -p reliability:=best_effort",
+    "python3 scripts/pr05_experiment.py --output evidence/pr05 (первичная запись сдачи; при повторении использовать новый каталог log/)",
+    "colcon test --event-handlers console_direct+",
+    "colcon test-result --verbose",
+    "python3 scripts/pr05_experiment.py --output log/pr05-final-validation",
+    "QT_QPA_PLATFORM=offscreen python3 scripts/pr05_experiment.py --output log/pr05-offscreen-validation",
+    "QT_QPA_PLATFORM=offscreen python3 scripts/pr05_experiment.py --output log/pr05-ci-fixes-validation",
+    "python3 -m flake8 scripts/pr05_experiment.py --max-line-length 99",
+    "python3 /tmp/opencode/pr05-course/v1/tools/check_practice.py PR05 --submission ."
+  ],
+  "tests": [
+    {
+      "name": "Все три пакета собраны; colcon test-result: 25 tests, 0 errors, 0 failures, 2 skipped (прежние copyright-тесты)",
+      "status": "passed"
+    },
+    {
+      "name": "Девять тестов course_bringup: матрица reliability, валидация профиля, реальная доставка через relay, неизменность сериализованной Pose, namespace, installed launch, MCAP и стиль",
+      "status": "passed"
+    },
+    {
+      "name": "С record=false recorder и каталог bag отсутствуют; с record=true запускается один recorder",
+      "status": "passed"
+    },
+    {
+      "name": "Живой поток: BEST_EFFORT publisher и RELIABLE subscriber видны, callback не вызывается, echo exit=124; после смены читателя на BEST_EFFORT доставка есть и exit=0",
+      "status": "passed"
+    },
+    {
+      "name": "Remap выводит Twist в /turtle1/cmd_vel; два чтения /turtle1/pose подтверждают движение",
+      "status": "passed"
+    },
+    {
+      "name": "Один MCAP: 1264 сообщения только /robot_a/sensor_pose, длительность 20.278187595 с; metadata скопирована после штатного завершения",
+      "status": "passed"
+    },
+    {
+      "name": "На replay один rosbag2_player с BEST_EFFORT: reliable callback=0 и echo=124, best_effort callback>0 и echo=0; SHA-256 одного MCAP не изменился",
+      "status": "passed"
+    },
+    {
+      "name": "После окончательного исправления полный опыт повторён в log/pr05-final-validation; приложение, CLI и штатное завершение прошли проверки",
+      "status": "passed"
+    },
+    {
+      "name": "После доработок CI полный опыт повторён с QT_QPA_PLATFORM=offscreen в log/pr05-ci-fixes-validation; отдельно проверены отделение stderr от YAML и пять штатных остановок читателя без двойного SIGINT",
+      "status": "passed"
+    }
+  ],
+  "defect": {
+    "reproducer": "Коммит 0664085 зафиксировал reliable по умолчанию у launch-читателя при best_effort у relay. Запуск с subscriber_reliability:=reliable record:=false показал RELIABILITY, received=0 и timeout exit=124; то же отсутствие сообщений сохранено на replay одного исправленного bag.",
+    "root_cause": "Запрос RELIABLE строже предложения BEST_EFFORT. Discovery видит имя и тип, но middleware не соединяет несовместимые endpoints. History/depth, домен и тип совпадали; увеличение очереди не исправляет reliability.",
+    "proof_after": "Коммит a51a499 вернул совместимый best_effort по умолчанию. Явный best_effort reader получает Pose на живом потоке и replay с одним и тем же best_effort override; CLI exit=0, счётчик приложения растёт. В обоих replay-чтениях используется MCAP SHA-256 976f2fd831f979a42cf8545b2ebb78c4bc2ad75c00edcc70f39e0c1bc3e2d8bd; живой relay перед replay остановлен. Окончательный код дополнительно проверен полным повтором опыта."
+  },
+  "claims": {
+    "public_tests_passed": true,
+    "defect_reproduced": true,
+    "defect_fixed": true,
+    "replay_verified": true
+  },
+  "time": {
+    "contact_academic_hours": 0,
+    "self_study_hours": 0
+  },
+  "planned_time": {
+    "contact_academic_hours": 2,
+    "self_study_hours": 2
+  },
+  "time_note": "Норма именно ПР05: одна лабораторная пара и около 2 часов самостоятельной доработки. Личная очная работа и время самостоятельной подготовки студента агентом не измерялись; агентные прогоны не выдаются за фактические часы студента. План вынесен отдельно.",
+  "ai_used": true
+}

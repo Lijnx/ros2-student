@@ -63,4 +63,27 @@
 - Теоретические пояснения и краткий сценарий демонстрации подготовлены
   отдельно от репозитория.
 
+## PR05
+
+- Использован ИИ: да, GPT-6.1 Sol, интерфейс OpenCode.
+- Затронутые файлы: README.md, .gitignore, .github/workflows/pr04.yml,
+  .github/workflows/pr05.yml, src/patrol/patrol/patrol.py,
+  src/course_bringup/package.xml, src/course_bringup/setup.py,
+  src/course_bringup/setup.cfg, src/course_bringup/resource/course_bringup,
+  src/course_bringup/course_bringup/{__init__,qos,pose_relay,pose_subscriber}.py,
+  src/course_bringup/launch/patrol.launch.py,
+  src/course_bringup/config/qos-overrides.yaml, config/qos-overrides.yaml,
+  src/course_bringup/test/{test_qos,test_launch,test_style}.py,
+  scripts/pr05_experiment.py, evidence/pr05/ и эта декларация.
+- Помощь: консультации по launch, namespace, remap, совместимости QoS и MCAP;
+  подготовка пакета, тестов, сценария опыта, CI и оформления результатов.
+- Проверка: все пакеты собраны и протестированы в ROS-контейнере; несовместимые
+  профили и исправление проверены по конечным точкам графа, счётчику приложения
+  и CLI на живом потоке и повторе одной записи. Проверены отсутствие recorder
+  при record=false, движение, другой namespace и завершение процессов;
+  неизменность MCAP подтверждена SHA-256. Комплектность проверена course kit;
+  GitHub CI повторяет функциональный опыт без окна.
+- Теоретические пояснения и подробный сценарий демонстрации подготовлены
+  отдельно от репозитория.
+
 Переписка, личные промпты и секреты не включены.

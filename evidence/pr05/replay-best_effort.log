@@ -1,0 +1,12 @@
+$ ros2 run course_bringup pose_subscriber --ros-args -r __ns:=/robot_a -p reliability:=best_effort
+[INFO] [1793003739.375230805] [robot_a.pose_subscriber]: sensor_pose reliability=best_effort
+[INFO] [1793003740.358070721] [robot_a.pose_subscriber]: reliability=best_effort received=59
+[INFO] [1793003741.357267515] [robot_a.pose_subscriber]: reliability=best_effort received=121
+[INFO] [1793003742.357247861] [robot_a.pose_subscriber]: reliability=best_effort received=184
+[INFO] [1793003743.357444781] [robot_a.pose_subscriber]: reliability=best_effort received=246
+[INFO] [1793003744.357492485] [robot_a.pose_subscriber]: reliability=best_effort received=309
+[INFO] [1793003745.357490522] [robot_a.pose_subscriber]: reliability=best_effort received=371
+[INFO] [1793003746.358164711] [robot_a.pose_subscriber]: reliability=best_effort received=434
+[ros2run]: Received signal:  Interrupt
+
+exit=0

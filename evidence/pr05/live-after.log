@@ -1,0 +1,81 @@
+$ ros2 launch course_bringup patrol.launch.py namespace:=robot_a bag_dir:=/work/evidence/pr05/bag subscriber_reliability:=best_effort record:=true
+[INFO] [launch]: All log files can be found below /root/.ros/log/2026-10-26-08-35-00-308445-ea35817692fd-2827
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [launch.user]: namespace=robot_a, record=true, subscriber_reliability=best_effort, bag_dir=/work/evidence/pr05/bag
+[INFO] [turtlesim_node-1]: process started with pid [2868]
+[INFO] [patrol-2]: process started with pid [2869]
+[INFO] [pose_relay-3]: process started with pid [2870]
+[INFO] [pose_subscriber-4]: process started with pid [2872]
+[INFO] [ros2-5]: process started with pid [2874]
+[turtlesim_node-1] [INFO] [1793003700.776010813] [turtlesim]: Starting turtlesim with node name /turtlesim
+[turtlesim_node-1] [INFO] [1793003700.804396601] [turtlesim]: Spawning turtle [turtle1] at x=[5.544445], y=[5.544445], theta=[0.000000]
+[pose_subscriber-4] [INFO] [1793003701.559976532] [robot_a.pose_subscriber]: sensor_pose reliability=best_effort
+[ros2-5] [INFO] [1793003701.649689519] [rosbag2_recorder]: Event publisher thread: Started
+[pose_relay-3] [INFO] [1793003701.665484316] [robot_a.pose_relay]: pose -> sensor_pose: best_effort, volatile, depth=10
+[ros2-5] [INFO] [1793003701.681291194] [rosbag2_recorder]: Starting recording to '/work/evidence/pr05/bag'
+[ros2-5] [WARN] [1793003701.681445609] [rosbag2_recorder]: No input serialization format specified, using default rmw serialization format: 'cdr'.
+[ros2-5] [INFO] [1793003701.685885865] [rosbag2_recorder]: Listening for topics...
+[ros2-5] [INFO] [1793003701.686014189] [rosbag2_recorder]: Recording...
+[ros2-5] [INFO] [1793003701.686053184] [rosbag2_recorder]: Topics discovery started.
+[ros2-5] [INFO] [1793003701.739825632] [rosbag2_recorder]: Overriding subscription profile for /robot_a/sensor_pose
+[ros2-5] [INFO] [1793003701.750919961] [rosbag2_recorder]: Subscribed to topic '/robot_a/sensor_pose'
+[ros2-5] [INFO] [1793003701.751037786] [rosbag2_recorder]: All requested topics are subscribed. Stopping discovery...
+[ros2-5] [INFO] [1793003701.751053546] [rosbag2_recorder]: Topics discovery stopped.
+[pose_subscriber-4] [INFO] [1793003702.536819207] [robot_a.pose_subscriber]: reliability=best_effort received=56
+[pose_subscriber-4] [INFO] [1793003703.537450663] [robot_a.pose_subscriber]: reliability=best_effort received=119
+[pose_subscriber-4] [INFO] [1793003704.537879840] [robot_a.pose_subscriber]: reliability=best_effort received=181
+[pose_subscriber-4] [INFO] [1793003705.536810790] [robot_a.pose_subscriber]: reliability=best_effort received=242
+[pose_subscriber-4] [INFO] [1793003706.537326784] [robot_a.pose_subscriber]: reliability=best_effort received=304
+[pose_subscriber-4] [INFO] [1793003707.537013702] [robot_a.pose_subscriber]: reliability=best_effort received=366
+[pose_subscriber-4] [INFO] [1793003708.537588409] [robot_a.pose_subscriber]: reliability=best_effort received=428
+[pose_subscriber-4] [INFO] [1793003709.537033213] [robot_a.pose_subscriber]: reliability=best_effort received=491
+[pose_subscriber-4] [INFO] [1793003710.536855370] [robot_a.pose_subscriber]: reliability=best_effort received=552
+[pose_subscriber-4] [INFO] [1793003711.537497176] [robot_a.pose_subscriber]: reliability=best_effort received=614
+[pose_subscriber-4] [INFO] [1793003712.537112737] [robot_a.pose_subscriber]: reliability=best_effort received=677
+[pose_subscriber-4] [INFO] [1793003713.537402330] [robot_a.pose_subscriber]: reliability=best_effort received=739
+[pose_subscriber-4] [INFO] [1793003714.537028504] [robot_a.pose_subscriber]: reliability=best_effort received=802
+[pose_subscriber-4] [INFO] [1793003715.537589265] [robot_a.pose_subscriber]: reliability=best_effort received=864
+[pose_subscriber-4] [INFO] [1793003716.536808508] [robot_a.pose_subscriber]: reliability=best_effort received=927
+[pose_subscriber-4] [INFO] [1793003717.537408683] [robot_a.pose_subscriber]: reliability=best_effort received=989
+[pose_subscriber-4] [INFO] [1793003718.536968538] [robot_a.pose_subscriber]: reliability=best_effort received=1052
+[pose_subscriber-4] [INFO] [1793003719.537347379] [robot_a.pose_subscriber]: reliability=best_effort received=1114
+[pose_subscriber-4] [INFO] [1793003720.537142630] [robot_a.pose_subscriber]: reliability=best_effort received=1177
+[pose_subscriber-4] [INFO] [1793003721.538480022] [robot_a.pose_subscriber]: reliability=best_effort received=1239
+[WARNING] [launch]: user interrupted with ctrl-c (SIGINT)
+[ros2-5] [INFO] [1793003722.048351242] [rosbag2_cpp]: Writing remaining messages from cache to the bag. It may take a while
+[INFO] [ros2-5]: sending signal 'SIGINT' to process[ros2-5]
+[INFO] [pose_subscriber-4]: sending signal 'SIGINT' to process[pose_subscriber-4]
+[INFO] [pose_relay-3]: sending signal 'SIGINT' to process[pose_relay-3]
+[INFO] [patrol-2]: sending signal 'SIGINT' to process[patrol-2]
+[INFO] [turtlesim_node-1]: sending signal 'SIGINT' to process[turtlesim_node-1]
+[turtlesim_node-1] [INFO] [1793003722.048733400] [rclcpp]: signal_handler(signum=2)
+[ros2-5] [INFO] [1793003722.061292766] [rosbag2_recorder]: Recording stopped
+[ros2-5] [INFO] [1793003722.067164361] [rosbag2_recorder]: Event publisher thread: Exited
+[pose_relay-3] Traceback (most recent call last):
+[pose_relay-3]   File "/work/install/course_bringup/lib/course_bringup/pose_relay", line 33, in <module>
+[pose_relay-3]     sys.exit(load_entry_point('course-bringup', 'console_scripts', 'pose_relay')())
+[pose_relay-3]              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+[pose_relay-3]   File "/work/build/course_bringup/course_bringup/pose_relay.py", line 30, in main
+[pose_relay-3]     node.destroy_node()
+[pose_relay-3]     ~~~~~~~~~~~~~~~~~^^
+[pose_relay-3]   File "/opt/ros/lyrical/lib/python3.14/site-packages/rclpy/node.py", line 2708, in destroy_node
+[pose_relay-3]     self.destroy_service(self._services[0])
+[pose_relay-3]     ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+[pose_relay-3]   File "/opt/ros/lyrical/lib/python3.14/site-packages/rclpy/node.py", line 2642, in destroy_service
+[pose_relay-3]     service.destroy()
+[pose_relay-3]     ~~~~~~~~~~~~~~~^^
+[pose_relay-3]   File "/opt/ros/lyrical/lib/python3.14/site-packages/rclpy/service.py", line 129, in destroy
+[pose_relay-3]     self._destroy()
+[pose_relay-3]     ~~~~~~~~~~~~~^^
+[pose_relay-3]   File "/opt/ros/lyrical/lib/python3.14/site-packages/rclpy/service.py", line 132, in _destroy
+[pose_relay-3]     self.handle.destroy_when_not_in_use()
+[pose_relay-3]     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+[pose_relay-3] KeyboardInterrupt
+[turtlesim_node-1] [INFO] [1793003722.073921675] [rclcpp]: signal_handler(signum=2)
+[ERROR] [pose_subscriber-4]: process has died [pid 2872, exit code -2, cmd '/work/install/course_bringup/lib/course_bringup/pose_subscriber --ros-args -r __ns:=/robot_a --params-file /tmp/launch_params_2qwjbsuz'].
+[ERROR] [patrol-2]: process has died [pid 2869, exit code -2, cmd '/work/install/patrol/lib/patrol/patrol --ros-args -r __ns:=/robot_a -r turtle1/pose:=/turtle1/pose -r cmd_vel:=/turtle1/cmd_vel'].
+[ERROR] [pose_relay-3]: process has died [pid 2870, exit code -2, cmd '/work/install/course_bringup/lib/course_bringup/pose_relay --ros-args -r __ns:=/robot_a -r pose:=/turtle1/pose'].
+[INFO] [turtlesim_node-1]: process has finished cleanly [pid 2868]
+[ERROR] [ros2-5]: process has died [pid 2874, exit code 2, cmd 'ros2 bag record -s mcap -o /work/evidence/pr05/bag --disable-keyboard-controls --qos-profile-overrides-path /work/install/course_bringup/share/course_bringup/config/qos-overrides.yaml --topics /robot_a/sensor_pose'].
+
+exit=0

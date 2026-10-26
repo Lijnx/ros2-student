@@ -1,0 +1,2 @@
+PR05 experiment passed; results: /work/log/pr05-offscreen-validation
+PASS: stderr diagnostics retained in logs, excluded from machine-readable YAML

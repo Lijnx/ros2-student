@@ -245,3 +245,130 @@ ros2 topic hz /turtle1/cmd_vel
 Полные команды и фактические результаты до и после намеренного дефекта
 записаны в `evidence/pr04/parameters.md`. Тесты пакета и checker запускаются
 по порядку из раздела ПР03, заменив в последней команде `PR03` на `PR04`.
+
+# ПР05. Launch, QoS и повтор записи
+
+`course_bringup` запускает один глобальный turtlesim, прежний `patrol`,
+`pose_relay` и отдельный `pose_subscriber`. Ноды курса находятся в `/robot_a`;
+поза и команда turtlesim подключены через remap. Все имена топиков в коде
+нод относительные. При запуске `patrol` без namespace его поведение из ПР04
+сохраняется.
+
+Relay копирует позу в `/robot_a/sensor_pose`: `best_effort`, `volatile`,
+`keep_last`, depth=10. Подписчик выбирает `reliable` или `best_effort` при
+старте и раз в секунду пишет число полученных сообщений. Параметр reliability
+read-only: для смены QoS нужно пересоздать подписку, здесь — перезапустить ноду.
+
+## Сборка и запуск
+
+Используется тот же закреплённый ROS 2 Lyrical-образ из ПР01. Все команды
+выполняются из корня workspace внутри одного контейнера. Можно использовать
+уже работающий ROS-контейнер либо создать отдельный:
+
+```bash
+docker run -d --name pr05-ros2 -e DISPLAY -e QT_X11_NO_MITSHM=1 \
+  -v /tmp/.X11-unix:/tmp/.X11-unix -v "$PWD:/work" -w /work \
+  osrf/ros:lyrical-desktop-full@sha256:e6b1cb530b65588279681db53784e264ce5cf83f2cc33e689d27d6024d7f3ebe \
+  sleep infinity
+docker exec -it pr05-ros2 bash
+source /opt/ros/lyrical/setup.bash
+export ROS_DOMAIN_ID=25
+colcon build --symlink-install
+source install/setup.bash
+ros2 launch course_bringup patrol.launch.py --show-args
+```
+
+В каждом следующем терминале подключить ROS, `install/setup.bash` и тот же
+домен. Для работы без окна вместо настройки X11 задать
+`export QT_QPA_PLATFORM=offscreen`; сам turtlesim и обмен сообщениями работают.
+
+```bash
+# A: намеренная несовместимость; запись не запускается.
+ros2 launch course_bringup patrol.launch.py \
+  namespace:=robot_a subscriber_reliability:=reliable record:=false
+
+# B: топик виден, но echo завершается с exit=124.
+ros2 topic info /robot_a/sensor_pose --verbose --no-daemon --spin-time 2
+timeout 4s ros2 topic echo /robot_a/sensor_pose turtlesim_msgs/msg/Pose \
+  --qos-reliability reliable --once
+echo "exit=$?"
+```
+
+Остановить A через `Ctrl+C`. Затем запустить исправленный вариант:
+
+```bash
+# A: каталог bag_dir должен быть новым; recorder включён через IfCondition.
+ros2 launch course_bringup patrol.launch.py \
+  namespace:=robot_a subscriber_reliability:=best_effort \
+  record:=true bag_dir:=log/pr05-manual-bag
+
+# B: теперь echo получает позу, exit=0.
+timeout 4s ros2 topic echo /robot_a/sensor_pose turtlesim_msgs/msg/Pose \
+  --qos-reliability best_effort --once
+echo "exit=$?"
+```
+
+Дать записи поработать 10–15 секунд и остановить **весь launch** через `Ctrl+C`:
+recorder завершит MCAP и metadata. Replay запускать только после остановки
+живых нод:
+
+```bash
+# A: одна и та же запись для обоих подписчиков.
+ros2 bag play log/pr05-manual-bag --loop \
+  --qos-profile-overrides-path config/qos-overrides.yaml
+
+# B: первый запрос — exit=124, второй — exit=0.
+timeout 4s ros2 topic echo /robot_a/sensor_pose turtlesim_msgs/msg/Pose \
+  --qos-reliability reliable --once
+echo "exit=$?"
+timeout 4s ros2 topic echo /robot_a/sensor_pose turtlesim_msgs/msg/Pose \
+  --qos-reliability best_effort --once
+echo "exit=$?"
+ros2 bag info log/pr05-manual-bag
+```
+
+Остановить player через `Ctrl+C`. `config/qos-overrides.yaml` относится к
+контрактному `/robot_a/sensor_pose`; для replay другого namespace нужно
+изменить ключ YAML. Launch поддерживает также `namespace:=/robot_b`:
+recorder выбирает его поток динамически и адаптирует QoS к издателю.
+
+## Автоматическое повторение и проверки
+
+В свободном домене, без других нод:
+
+```bash
+colcon test --event-handlers console_direct+
+colcon test-result --verbose
+python3 scripts/pr05_experiment.py
+```
+
+Скрипт создаёт свежий каталог `log/pr05-<дата-время>`, не заменяет существующие
+bag, проверяет приложение и CLI на живом потоке и replay, движение, отсутствие
+recorder при `record:=false`, один топик в MCAP, неизменность SHA-256 записи
+и корректное завершение процессов. `--output <каталог>` задаёт другой путь.
+Не используйте `evidence/pr05` для повторного запуска: там уже лежит исходная
+запись сдачи (локально) и её опубликованные логи.
+
+Тесты дополнительно проверяют неизменность сериализованной позы, матрицу QoS,
+отказ неизвестного профиля, установленный launch с `/robot_b` и финализацию
+MCAP при завершении. CI повторяет этот же функциональный опыт без окна и
+прикладывает новую запись в artifact `pr05-runtime`.
+
+Для checker ПР05 закреплён course kit `v1-w08`:
+
+```bash
+curl -fsSLo course-kit.tar.gz \
+  https://ros.lms.ci.nsu.ru/downloads/robotics-course-kit-v1-w08-aea8efd0a516.tar.gz
+printf '%s  %s\n' \
+  aea8efd0a51668af63f2e475b82bfa28bd76c21f20d8afea6b136d43a56a88fb \
+  course-kit.tar.gz | sha256sum -c -
+mkdir -p .course-kit
+tar -xzf course-kit.tar.gz -C .course-kit
+python3 .course-kit/v1/tools/check_practice.py PR05 --submission .
+```
+
+Фактические результаты находятся в `evidence/pr05/`: `qos-before.txt`,
+`qos-after.txt`, логи процессов, `bag-metadata.yaml`, `tests.txt` и отчёт.
+MCAP хранится локально в `evidence/pr05/bag/` и исключён из Git; его digest
+сохранён в `qos-after.txt`. Checker проверяет комплектность evidence,
+а не заменяет проверку доставки сообщений.

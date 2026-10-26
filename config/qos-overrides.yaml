@@ -1,0 +1,6 @@
+# Replay of the mandatory /robot_a experiment; installed copy lives in course_bringup.
+/robot_a/sensor_pose:
+  reliability: best_effort
+  durability: volatile
+  history: keep_last
+  depth: 10

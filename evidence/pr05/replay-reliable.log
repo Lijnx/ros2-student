@@ -1,0 +1,15 @@
+$ ros2 run course_bringup pose_subscriber --ros-args -r __ns:=/robot_a -p reliability:=reliable
+[INFO] [1793003728.490919412] [robot_a.pose_subscriber]: sensor_pose reliability=reliable
+[WARN] [1793003728.525816412] [robot_a.pose_subscriber]: New publisher discovered on topic 'sensor_pose', offering incompatible QoS. No messages will be received from it. Last incompatible policy: RELIABILITY
+[INFO] [1793003729.472377749] [robot_a.pose_subscriber]: reliability=reliable received=0
+[INFO] [1793003730.472380580] [robot_a.pose_subscriber]: reliability=reliable received=0
+[INFO] [1793003731.472900210] [robot_a.pose_subscriber]: reliability=reliable received=0
+[INFO] [1793003732.473003588] [robot_a.pose_subscriber]: reliability=reliable received=0
+[INFO] [1793003733.472722551] [robot_a.pose_subscriber]: reliability=reliable received=0
+[INFO] [1793003734.473349835] [robot_a.pose_subscriber]: reliability=reliable received=0
+[INFO] [1793003735.473064178] [robot_a.pose_subscriber]: reliability=reliable received=0
+[INFO] [1793003736.472760218] [robot_a.pose_subscriber]: reliability=reliable received=0
+[INFO] [1793003737.472792197] [robot_a.pose_subscriber]: reliability=reliable received=0
+[ros2run]: Received signal:  Interrupt
+
+exit=0
