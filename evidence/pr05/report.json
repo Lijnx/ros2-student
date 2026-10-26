@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "practice_id": "PR05",
-  "commit": "a51a499d0b0f2a24ff8b0bcb1378ee37529a5850",
+  "commit": "1b2f84e601b778484581045f0ab5fd850de41f28",
   "course_kit": {
     "version": "v1-w08",
     "archive_sha256": "aea8efd0a51668af63f2e475b82bfa28bd76c21f20d8afea6b136d43a56a88fb"
@@ -25,6 +25,8 @@
     "colcon test --event-handlers console_direct+",
     "colcon test-result --verbose",
     "python3 scripts/pr05_experiment.py --output log/pr05-final-validation",
+    "QT_QPA_PLATFORM=offscreen python3 scripts/pr05_experiment.py --output log/pr05-offscreen-validation",
+    "QT_QPA_PLATFORM=offscreen python3 scripts/pr05_experiment.py --output log/pr05-ci-fixes-validation",
     "python3 -m flake8 scripts/pr05_experiment.py --max-line-length 99",
     "python3 /tmp/opencode/pr05-course/v1/tools/check_practice.py PR05 --submission ."
   ],
@@ -59,6 +61,10 @@
     },
     {
       "name": "После окончательного исправления полный опыт повторён в log/pr05-final-validation; приложение, CLI и штатное завершение прошли проверки",
+      "status": "passed"
+    },
+    {
+      "name": "После доработок CI полный опыт повторён с QT_QPA_PLATFORM=offscreen в log/pr05-ci-fixes-validation; отдельно проверены отделение stderr от YAML и пять штатных остановок читателя без двойного SIGINT",
       "status": "passed"
     }
   ],
