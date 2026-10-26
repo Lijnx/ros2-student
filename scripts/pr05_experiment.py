@@ -6,15 +6,15 @@ The output directory defaults to log/pr05-<timestamp>, outside tracked evidence.
 """
 
 import argparse
-from contextlib import contextmanager
 import hashlib
 import os
-from pathlib import Path
 import re
 import shlex
 import signal
 import subprocess
 import time
+from contextlib import contextmanager
+from pathlib import Path
 
 import yaml
 

@@ -19,7 +19,7 @@ def generate_launch_description():
         DeclareLaunchArgument('record', default_value='false', choices=['true', 'false']),
         DeclareLaunchArgument('bag_dir', default_value='evidence/pr05/bag'),
         DeclareLaunchArgument(
-            'subscriber_reliability', default_value='reliable',
+            'subscriber_reliability', default_value='best_effort',
             choices=['reliable', 'best_effort']),
         LogInfo(msg=['namespace=', namespace, ', record=', record,
                      ', subscriber_reliability=', reliability, ', bag_dir=', bag_dir]),

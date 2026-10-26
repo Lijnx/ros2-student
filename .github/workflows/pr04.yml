@@ -2,11 +2,15 @@ name: PR04 parameters and evidence
 
 on:
   push:
+    branches:
+      - feat/pr04
     paths:
       - 'src/patrol/**'
       - 'evidence/pr04/**'
       - '.github/workflows/pr04.yml'
   pull_request:
+    branches:
+      - feat/pr04
     paths:
       - 'src/patrol/**'
       - 'evidence/pr04/**'

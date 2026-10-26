@@ -10,7 +10,8 @@ import rclpy
 from rclpy.executors import SingleThreadedExecutor
 from rclpy.node import Node
 from rclpy.parameter import Parameter
-from rclpy.qos import DurabilityPolicy, HistoryPolicy, ReliabilityPolicy
+from rclpy.qos import DurabilityPolicy, HistoryPolicy, QoSCompatibility
+from rclpy.qos import qos_check_compatible, ReliabilityPolicy
 from rclpy.serialization import serialize_message
 from turtlesim_msgs.msg import Pose
 
@@ -24,6 +25,17 @@ def test_profiles():
     assert pose_qos('reliable').reliability == ReliabilityPolicy.RELIABLE
     with pytest.raises(ValueError):
         pose_qos('relaiable')
+
+
+@pytest.mark.parametrize('offered,requested,compatible', [
+    ('best_effort', 'best_effort', True),
+    ('best_effort', 'reliable', False),
+    ('reliable', 'best_effort', True),
+    ('reliable', 'reliable', True),
+])
+def test_reliability_matrix(offered, requested, compatible):
+    compatibility, _ = qos_check_compatible(pose_qos(offered), pose_qos(requested))
+    assert (compatibility == QoSCompatibility.OK) == compatible
 
 
 def test_relay_delivery_and_incompatible_reader():
