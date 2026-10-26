@@ -18,5 +18,5 @@ RMW: rmw_fastrtps_cpp
 Image: osrf/ros:lyrical-desktop-full@sha256:e6b1cb530b65588279681db53784e264ce5cf83f2cc33e689d27d6024d7f3ebe
 Workspace: /work; host: /home/lynx2/ros2-student
 Experiment ROS_DOMAIN_ID=25; wall time; turtlesim GUI via WSLg/X11
-CI: same image, QT_QPA_PLATFORM=offscreen
+CI: same image; build, package tests and evidence checker only; no turtlesim/record/replay
 Course kit: v1-w08; sha256=aea8efd0a51668af63f2e475b82bfa28bd76c21f20d8afea6b136d43a56a88fb

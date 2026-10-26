@@ -1,2 +1,0 @@
-PR05 experiment passed; results: /work/log/pr05-ci-fixes-validation
-PASS: five reader shutdowns, no duplicate SIGINT during rclpy cleanup

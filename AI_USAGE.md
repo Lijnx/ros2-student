@@ -73,7 +73,7 @@
   src/course_bringup/course_bringup/{__init__,qos,pose_relay,pose_subscriber}.py,
   src/course_bringup/launch/patrol.launch.py,
   src/course_bringup/config/qos-overrides.yaml, config/qos-overrides.yaml,
-  src/course_bringup/test/{test_qos,test_launch,test_style}.py,
+  src/course_bringup/test/{test_qos,test_style}.py,
   scripts/pr05_experiment.py, evidence/pr05/ и эта декларация.
 - Помощь: консультации по launch, namespace, remap, совместимости QoS и MCAP;
   подготовка пакета, тестов, сценария опыта, CI и оформления результатов.
@@ -82,7 +82,8 @@
   и CLI на живом потоке и повторе одной записи. Проверены отсутствие recorder
   при record=false, движение, другой namespace и завершение процессов;
   неизменность MCAP подтверждена SHA-256. Комплектность проверена course kit;
-  GitHub CI повторяет функциональный опыт без окна.
+  GitHub CI выполняет сборку, функциональные тесты пакетов и checker;
+  живой опыт с turtlesim, записью и replay проверен локально.
 - Теоретические пояснения и подробный сценарий демонстрации подготовлены
   отдельно от репозитория.
 

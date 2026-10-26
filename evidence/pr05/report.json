@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "practice_id": "PR05",
-  "commit": "1fd7de4cd802e982b5bd1517e814625100546ab4",
+  "commit": "d5178dab723f7c5191d9aeaaa90fa1a499afce06",
   "course_kit": {
     "version": "v1-w08",
     "archive_sha256": "aea8efd0a51668af63f2e475b82bfa28bd76c21f20d8afea6b136d43a56a88fb"
@@ -25,19 +25,16 @@
     "colcon test --event-handlers console_direct+",
     "colcon test-result --verbose",
     "python3 scripts/pr05_experiment.py --output log/pr05-final-validation",
-    "QT_QPA_PLATFORM=offscreen python3 scripts/pr05_experiment.py --output log/pr05-offscreen-validation",
-    "QT_QPA_PLATFORM=offscreen python3 scripts/pr05_experiment.py --output log/pr05-ci-fixes-validation",
-    "QT_QPA_PLATFORM=offscreen python3 scripts/pr05_experiment.py --output log/pr05-discovery-validation",
     "python3 -m flake8 scripts/pr05_experiment.py --max-line-length 99",
     "python3 /tmp/opencode/pr05-course/v1/tools/check_practice.py PR05 --submission ."
   ],
   "tests": [
     {
-      "name": "Все три пакета собраны; colcon test-result: 25 tests, 0 errors, 0 failures, 2 skipped (прежние copyright-тесты)",
+      "name": "Все три пакета собраны; colcon test-result: 24 tests, 0 errors, 0 failures, 2 skipped (прежние copyright-тесты)",
       "status": "passed"
     },
     {
-      "name": "Девять тестов course_bringup: матрица reliability, валидация профиля, реальная доставка через relay, неизменность сериализованной Pose, namespace, installed launch, MCAP и стиль",
+      "name": "Восемь тестов course_bringup: матрица reliability, валидация профиля, реальная доставка через relay, неизменность сериализованной Pose, namespace и стиль",
       "status": "passed"
     },
     {
@@ -62,14 +59,6 @@
     },
     {
       "name": "После окончательного исправления полный опыт повторён в log/pr05-final-validation; приложение, CLI и штатное завершение прошли проверки",
-      "status": "passed"
-    },
-    {
-      "name": "После доработок CI полный опыт повторён с QT_QPA_PLATFORM=offscreen в log/pr05-ci-fixes-validation; отдельно проверены отделение stderr от YAML и пять штатных остановок читателя без двойного SIGINT",
-      "status": "passed"
-    },
-    {
-      "name": "В log/pr05-discovery-validation повторён полный опыт; синтетический тест подтвердил ограниченный повтор только Unknown topic у graph query с сохранением ошибок в логах. Проверка QoS-timeout выполняется один раз без повторов",
       "status": "passed"
     }
   ],

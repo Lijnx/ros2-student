@@ -1,8 +1,8 @@
 Starting >>> patrol
 Starting >>> turtle_bringup
-Finished <<< turtle_bringup [4.01s]
-Finished <<< patrol [4.07s]
+Finished <<< turtle_bringup [2.30s]
+Finished <<< patrol [2.35s]
 Starting >>> course_bringup
-Finished <<< course_bringup [3.10s]
+Finished <<< course_bringup [1.71s]
 
-Summary: 3 packages finished [7.59s]
+Summary: 3 packages finished [4.35s]
