@@ -1,0 +1,135 @@
+Command: ros2 topic info /tf_static --verbose --no-daemon --spin-time 2
+Type: tf2_msgs/msg/TFMessage
+
+Publisher count: 1
+
+Node name: robot_state_publisher
+Node namespace: /
+Topic type: tf2_msgs/msg/TFMessage
+Topic type hash: RIHS01_e369d0f05a23ae52508854b66f6aa0437f3449d652e8cbf22d5abe85d020f087
+Endpoint type: PUBLISHER
+GID: 01.0f.eb.7d.64.2f.dc.e3.00.00.00.00.00.00.16.03
+QoS profile:
+  Reliability: RELIABLE
+  History (Depth): KEEP_LAST (1)
+  Durability: TRANSIENT_LOCAL
+  Lifespan: Infinite
+  Deadline: Infinite
+  Liveliness: AUTOMATIC
+  Liveliness lease duration: Infinite
+
+Subscription count: 1
+
+Node name: transform_listener_impl_636b3caad410
+Node namespace: /
+Topic type: tf2_msgs/msg/TFMessage
+Topic type hash: RIHS01_e369d0f05a23ae52508854b66f6aa0437f3449d652e8cbf22d5abe85d020f087
+Endpoint type: SUBSCRIPTION
+GID: 01.0f.eb.7d.65.2f.4a.cd.00.00.00.00.00.00.17.04
+QoS profile:
+  Reliability: RELIABLE
+  History (Depth): KEEP_LAST (100)
+  Durability: TRANSIENT_LOCAL
+  Lifespan: Infinite
+  Deadline: Infinite
+  Liveliness: AUTOMATIC
+  Liveliness lease duration: Infinite
+
+Command: timeout 4s ros2 topic echo /tf_static --once --qos-durability transient_local --qos-reliability reliable
+transforms:
+- header:
+    stamp:
+      sec: 1793010352
+      nanosec: 691867539
+    frame_id: base_link
+  child_frame_id: camera_link
+  transform:
+    translation:
+      x: 0.28
+      y: 0.0
+      z: 0.38
+    rotation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+- header:
+    stamp:
+      sec: 1793010352
+      nanosec: 691867539
+    frame_id: base_link
+  child_frame_id: imu_link
+  transform:
+    translation:
+      x: 0.28
+      y: 0.0
+      z: 0.38
+    rotation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+- header:
+    stamp:
+      sec: 1793010352
+      nanosec: 691867539
+    frame_id: base_link
+  child_frame_id: lidar_link
+  transform:
+    translation:
+      x: 0.28
+      y: 0.0
+      z: 0.38
+    rotation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+---
+exit=0
+Command: timeout 4s ros2 topic echo /tf_static --once --qos-durability volatile --qos-reliability reliable
+!rclpy.ok()
+exit=124
+Пояснение: /tf_static передаёт фиксированные преобразования с reliable и
+transient_local; поздний transient-local-подписчик получает сохранённую историю.
+Volatile-подписчик совместим с этим издателем, но не получает старое сообщение:
+при отсутствии новых публикаций echo заканчивается по timeout с exit=124.
+/tf использует volatile и передаёт обновления подвижных сочленений по joint_states;
+история для позднего подписчика не нужна, актуальное положение приходит с обновлениями.
+
+Command: ros2 topic info /tf --verbose --no-daemon --spin-time 2
+Type: tf2_msgs/msg/TFMessage
+
+Publisher count: 1
+
+Node name: robot_state_publisher
+Node namespace: /
+Topic type: tf2_msgs/msg/TFMessage
+Topic type hash: RIHS01_e369d0f05a23ae52508854b66f6aa0437f3449d652e8cbf22d5abe85d020f087
+Endpoint type: PUBLISHER
+GID: 01.0f.eb.7d.64.2f.dc.e3.00.00.00.00.00.00.15.03
+QoS profile:
+  Reliability: RELIABLE
+  History (Depth): KEEP_LAST (100)
+  Durability: VOLATILE
+  Lifespan: Infinite
+  Deadline: Infinite
+  Liveliness: AUTOMATIC
+  Liveliness lease duration: Infinite
+
+Subscription count: 1
+
+Node name: transform_listener_impl_636b3caad410
+Node namespace: /
+Topic type: tf2_msgs/msg/TFMessage
+Topic type hash: RIHS01_e369d0f05a23ae52508854b66f6aa0437f3449d652e8cbf22d5abe85d020f087
+Endpoint type: SUBSCRIPTION
+GID: 01.0f.eb.7d.65.2f.4a.cd.00.00.00.00.00.00.16.04
+QoS profile:
+  Reliability: RELIABLE
+  History (Depth): KEEP_LAST (100)
+  Durability: VOLATILE
+  Lifespan: Infinite
+  Deadline: Infinite
+  Liveliness: AUTOMATIC
+  Liveliness lease duration: Infinite
