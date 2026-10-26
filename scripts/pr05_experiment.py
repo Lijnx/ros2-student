@@ -35,7 +35,8 @@ def run(command, log, expected=0):
                                 stderr=subprocess.PIPE, timeout=25)
         log.write(result.stdout + result.stderr + f'\nexit={result.returncode}\n')
         log.flush()
-        unknown = ('Unknown topic' in result.stderr or 'not found' in result.stderr)
+        unknown = any(message in result.stderr for message in (
+            'Unknown topic', 'Unable to find node', 'not found'))
         if (graph_query and result.returncode != expected and unknown
                 and time.monotonic() < deadline):
             log.write('Waiting for CLI discovery; retrying graph query only.\n')
