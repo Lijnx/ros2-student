@@ -332,6 +332,41 @@ ros2 bag info log/pr05-manual-bag
 изменить ключ YAML. Launch поддерживает также `namespace:=/robot_b`:
 recorder выбирает его поток динамически и адаптирует QoS к издателю.
 
+### Воспроизведение записи в окне turtlesim
+
+Дополнительная нода `pose_replay` отображает записанные координаты через сервис
+`turtle1/teleport_absolute`. Это визуализация поз, а не повтор команд скорости:
+bag содержит `/robot_a/sensor_pose`, а не `/turtle1/cmd_vel`.
+При медленном сервисе нода оставляет только последнюю позу, не накапливая очередь.
+
+После сборки `course_bringup` остановить прежний patrol launch. В трёх терминалах
+того же контейнера выполнить `cd /work`, подключить
+`/opt/ros/lyrical/setup.bash` и `install/setup.bash` через `source`,
+задать одинаковый `export ROS_DOMAIN_ID=26`.
+
+```bash
+# A: окно с черепахой (требуется рабочий DISPLAY).
+ros2 run turtlesim turtlesim_node
+```
+
+```bash
+# B: адаптер записанных поз; remap отделяет источник от сервиса turtlesim.
+ros2 run course_bringup pose_replay --ros-args \
+  -r sensor_pose:=/robot_a/sensor_pose
+```
+
+```bash
+# C: начать воспроизведение после запуска адаптера.
+ros2 bag play log/pr05-manual-bag --loop \
+  --qos-profile-overrides-path src/course_bringup/config/qos-overrides.yaml
+```
+
+Вместо `log/pr05-manual-bag` указать свой каталог записи, например
+`evidence/pr05/bag`. Черепаха повторяет записанные положения; при зацикливании
+переносится из последней точки в первую. Адаптер подписан с best-effort QoS.
+Не запускать одновременно patrol или другие источники управления этой черепахой.
+Остановить player, адаптер и turtlesim через `Ctrl+C` в своих терминалах.
+
 ## Проверки
 
 В свободном домене, без других нод:
