@@ -1,0 +1,79 @@
+Command: colcon build --symlink-install --packages-select course_description
+Starting >>> course_description
+Finished <<< course_description [0.40s]
+
+Summary: 1 package finished [0.75s]
+Command: xacro src/course_description/urdf/vehicle.urdf.xacro > log/pr06-vehicle.urdf
+Command: check_urdf log/pr06-vehicle.urdf
+robot name is: course_ackermann
+---------- Successfully Parsed XML ---------------
+root Link: base_link has 7 child(ren)
+    child(1):  camera_link
+    child(2):  front_left_knuckle
+        child(1):  front_left_wheel
+    child(3):  front_right_knuckle
+        child(1):  front_right_wheel
+    child(4):  imu_link
+    child(5):  lidar_link
+    child(6):  rear_left_wheel
+    child(7):  rear_right_wheel
+Command: colcon test --packages-select course_description --event-handlers console_direct+
+Starting >>> course_description
+SetCTestConfiguration:BuildDirectory:/work/build/course_description
+UpdateCTestConfiguration  from :/work/build/course_description/CTestConfiguration.ini
+Parse Config file:/work/build/course_description/CTestConfiguration.ini
+SetCMakeVariable:CTEST_SITE:ea35817692fd
+SetCMakeVariable:CTEST_SOURCE_DIRECTORY:/work/src/course_description
+SetCMakeVariable:CTEST_BINARY_DIRECTORY:/work/build/course_description
+SetCMakeVariable:CTEST_CONFIGURE_COMMAND:"/usr/bin/cmake" "/work/src/course_description"
+SetCMakeVariable:CTEST_TEST_TIMEOUT:10000000
+UpdateCTestConfiguration  from :/work/build/course_description/CTestConfiguration.ini
+Parse Config file:/work/build/course_description/CTestConfiguration.ini
+SetCMakeVariable:CTEST_SITE:ea35817692fd
+SetCMakeVariable:CTEST_SOURCE_DIRECTORY:/work/src/course_description
+SetCMakeVariable:CTEST_BINARY_DIRECTORY:/work/build/course_description
+SetCMakeVariable:CTEST_CONFIGURE_COMMAND:"/usr/bin/cmake" "/work/src/course_description"
+SetCTestConfiguration:BuildDirectory:/work/build/course_description
+SetCTestConfiguration:SourceDirectory:/work/src/course_description
+Test project /work/build/course_description
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 1
+    Start 1: model
+
+1: Test command: /usr/bin/python3 "-u" "/opt/ros/lyrical/share/ament_cmake_test/cmake/run_test.py" "/work/build/course_description/test_results/course_description/model.xunit.xml" "--package-name" "course_description" "--output-file" "/work/build/course_description/ament_cmake_pytest/model.txt" "--env" "PYTHONDONTWRITEBYTECODE=1" "--command" "/usr/bin/python3" "-u" "-m" "pytest" "/work/src/course_description/test/test_model.py" "-o" "cache_dir=/work/build/course_description/ament_cmake_pytest/model/.cache" "--junit-xml=/work/build/course_description/test_results/course_description/model.xunit.xml" "--junit-prefix=course_description"
+1: Working Directory: /work/build/course_description
+1: Test timeout computed to be: 60
+1: -- run_test.py: extra environment variables:
+1:  - PYTHONDONTWRITEBYTECODE=1
+1: -- run_test.py: invoking following command in '/work/build/course_description':
+1:  - /usr/bin/python3 -u -m pytest /work/src/course_description/test/test_model.py -o cache_dir=/work/build/course_description/ament_cmake_pytest/model/.cache --junit-xml=/work/build/course_description/test_results/course_description/model.xunit.xml --junit-prefix=course_description
+1: ============================= test session starts ==============================
+1: platform linux -- Python 3.14.4, pytest-9.0.2, pluggy-1.6.0
+1: cachedir: build/course_description/ament_cmake_pytest/model/.cache
+1: rootdir: /work
+1: plugins: ament_lint-0.20.6, ament_copyright-0.20.6, ament_pep257-0.20.6, ament_mypy-0.20.6, launch_testing_ros-0.29.8, ament_xmllint-0.20.6, ament_flake8-0.20.6, launch_testing-3.9.7, typeguard-4.4.4, colcon-core-0.21.0
+1: collected 5 items
+1:
+1: ../../src/course_description/test/test_model.py .....                    [100%]
+1:
+1: - generated xml file: /work/build/course_description/test_results/course_description/model.xunit.xml -
+1: ============================== 5 passed in 0.52s ===============================
+1: -- run_test.py: return code 0
+1: -- run_test.py: verify result file '/work/build/course_description/test_results/course_description/model.xunit.xml'
+1/1 Test #1: model ............................   Passed    1.43 sec
+
+100% tests passed, 0 tests failed out of 1
+
+Label Time Summary:
+pytest    =   1.43 sec*proc (1 test)
+
+Total Test time (real) =   1.43 sec
+Finished <<< course_description [1.55s]
+
+Summary: 1 package finished [1.85s]
+Summary: 6 tests, 0 errors, 0 failures, 0 skipped

@@ -98,5 +98,23 @@
 - Проверка: сборка и все 9 тестов course_bringup прошли в ROS 2 Lyrical.
   Локально воспроизведён сохранённый MCAP с настоящим turtlesim; сверены
   записанные и отображаемые позы, пользователь подтвердил движение в окне.
+## PR06
+
+- Использован ИИ: да, GPT-6.1 Sol, интерфейс OpenCode.
+- Затронутые файлы: src/course_description/{package.xml,CMakeLists.txt},
+  src/course_description/urdf/vehicle.urdf.xacro,
+  src/course_description/launch/display.launch.py,
+  src/course_description/rviz/vehicle.rviz,
+  src/course_description/test/test_model.py, .github/workflows/pr06.yml,
+  .github/workflows/pr05.yml, README.md, evidence/pr06/ и эта декларация.
+- Помощь: разбор URDF/Xacro, parent-relative преобразований и durability;
+  подготовка модели по размерам SDF курса, launch, тестов и оформления сдачи.
+- Проверка: Xacro развёрнут и принят check_urdf, структурные тесты выполнены
+  в ROS 2 Lyrical. Неверный parent лидара зафиксирован отдельным коммитом:
+  тест падает, tf2_echo показывает удвоенное смещение; после исправления
+  те же проверки проходят. На /tf_static проверены QoS и оба поздних читателя;
+  view_frames показывает дерево. Пользователь подтвердил модель и статусы OK
+  в RViz. CI выполняет сборку, тесты модели и checker; GUI и QoS проверены
+  локально стандартными командами ROS 2.
 
 Переписка, личные промпты и секреты не включены.

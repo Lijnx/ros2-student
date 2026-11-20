@@ -2,6 +2,8 @@ name: PR05 build, tests and evidence
 
 on:
   push:
+    branches:
+      - feat/pr05
     paths:
       - 'src/**'
       - 'config/**'
@@ -9,6 +11,8 @@ on:
       - 'AI_USAGE.md'
       - '.github/workflows/pr05.yml'
   pull_request:
+    branches:
+      - feat/pr05
     paths:
       - 'src/**'
       - 'config/**'

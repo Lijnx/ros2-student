@@ -1,0 +1,64 @@
+robot name is: course_ackermann
+---------- Successfully Parsed XML ---------------
+root Link: base_link has 7 child(ren)
+    child(1):  camera_link
+    child(2):  front_left_knuckle
+        child(1):  front_left_wheel
+    child(3):  front_right_knuckle
+        child(1):  front_right_wheel
+    child(4):  imu_link
+    child(5):  lidar_link
+    child(6):  rear_left_wheel
+    child(7):  rear_right_wheel
+.....                                                                    [100%]
+5 passed in 0.91s
+[INFO] [1793010368.093525612] [tf2_echo]: Waiting for transform base_link ->  lidar_link: Invalid frame ID "base_link" passed to canTransform argument target_frame - frame does not exist
+At time 0.0
+- Translation: [0.280, 0.000, 0.380]
+- Rotation: in Quaternion (xyzw) [0.000, 0.000, 0.000, 1.000]
+- Rotation: in RPY (radian) [0.000, -0.000, 0.000]
+- Rotation: in RPY (degree) [0.000, -0.000, 0.000]
+- Matrix:
+  1.000  0.000  0.000  0.280
+  0.000  1.000  0.000  0.000
+  0.000  0.000  1.000  0.380
+  0.000  0.000  0.000  1.000
+At time 0.0
+- Translation: [0.280, 0.000, 0.380]
+- Rotation: in Quaternion (xyzw) [0.000, 0.000, 0.000, 1.000]
+- Rotation: in RPY (radian) [0.000, -0.000, 0.000]
+- Rotation: in RPY (degree) [0.000, -0.000, 0.000]
+- Matrix:
+  1.000  0.000  0.000  0.280
+  0.000  1.000  0.000  0.000
+  0.000  0.000  1.000  0.380
+  0.000  0.000  0.000  1.000
+At time 0.0
+- Translation: [0.280, 0.000, 0.380]
+- Rotation: in Quaternion (xyzw) [0.000, 0.000, 0.000, 1.000]
+- Rotation: in RPY (radian) [0.000, -0.000, 0.000]
+- Rotation: in RPY (degree) [0.000, -0.000, 0.000]
+- Matrix:
+  1.000  0.000  0.000  0.280
+  0.000  1.000  0.000  0.000
+  0.000  0.000  1.000  0.380
+  0.000  0.000  0.000  1.000
+At time 0.0
+- Translation: [0.280, 0.000, 0.380]
+- Rotation: in Quaternion (xyzw) [0.000, 0.000, 0.000, 1.000]
+- Rotation: in RPY (radian) [0.000, -0.000, 0.000]
+- Rotation: in RPY (degree) [0.000, -0.000, 0.000]
+- Matrix:
+  1.000  0.000  0.000  0.280
+  0.000  1.000  0.000  0.000
+  0.000  0.000  1.000  0.380
+  0.000  0.000  0.000  1.000
+[INFO] [1793010372.408086577] [rclcpp]: signal_handler(signum=2)
+[ros2run]: Received signal:  Interrupt
+[ros2run]: Received signal:  Interrupt
+[INFO] [1793010372.410537119] [rclcpp]: signal_handler(signum=2)
+tf2_echo timeout exit=124
+[INFO] [1793010637.158090010] [view_frames]: Listening to tf data for 5.0 seconds...
+[INFO] [1793010642.216294530] [view_frames]: Generating graph...
+[INFO] [1793010642.220560358] [view_frames]: Result:tf2_msgs.srv.FrameGraph_Response(frame_yaml="camera_link: \n  parent: 'base_link'\n  broadcaster: 'default_authority'\n  rate: 10000.000\n  most_recent_transform: 0.000000\n  oldest_transform: 0.000000\n  buffer_length: 0.000\nimu_link: \n  parent: 'base_link'\n  broadcaster: 'default_authority'\n  rate: 10000.000\n  most_recent_transform: 0.000000\n  oldest_transform: 0.000000\n  buffer_length: 0.000\nlidar_link: \n  parent: 'base_link'\n  broadcaster: 'default_authority'\n  rate: 10000.000\n  most_recent_transform: 0.000000\n  oldest_transform: 0.000000\n  buffer_length: 0.000\nfront_left_knuckle: \n  parent: 'base_link'\n  broadcaster: 'default_authority'\n  rate: 10.200\n  most_recent_transform: 1793010642.213361\n  oldest_transform: 1793010637.213273\n  buffer_length: 5.000\nfront_left_wheel: \n  parent: 'front_left_knuckle'\n  broadcaster: 'default_authority'\n  rate: 10.200\n  most_recent_transform: 1793010642.213361\n  oldest_transform: 1793010637.213273\n  buffer_length: 5.000\nfront_right_knuckle: \n  parent: 'base_link'\n  broadcaster: 'default_authority'\n  rate: 10.200\n  most_recent_transform: 1793010642.213361\n  oldest_transform: 1793010637.213273\n  buffer_length: 5.000\nfront_right_wheel: \n  parent: 'front_right_knuckle'\n  broadcaster: 'default_authority'\n  rate: 10.200\n  most_recent_transform: 1793010642.213361\n  oldest_transform: 1793010637.213273\n  buffer_length: 5.000\nrear_left_wheel: \n  parent: 'base_link'\n  broadcaster: 'default_authority'\n  rate: 10.200\n  most_recent_transform: 1793010642.213361\n  oldest_transform: 1793010637.213273\n  buffer_length: 5.000\nrear_right_wheel: \n  parent: 'base_link'\n  broadcaster: 'default_authority'\n  rate: 10.200\n  most_recent_transform: 1793010642.213361\n  oldest_transform: 1793010637.213273\n  buffer_length: 5.000\n")
+[INFO] [1793010642.224351435] [view_frames]: Exporting graph in frames_2026-10-26_10.30.42.pdf file...

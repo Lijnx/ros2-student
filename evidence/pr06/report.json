@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "practice_id": "PR06",
+  "commit": "03f30d58cfe445d7172238f5af6fb3a850fe7334",
+  "course_kit": {
+    "version": "v1-w08",
+    "archive_sha256": "aea8efd0a51668af63f2e475b82bfa28bd76c21f20d8afea6b136d43a56a88fb"
+  },
+  "commands": [
+    "source /opt/ros/lyrical/setup.bash; export ROS_DOMAIN_ID=26",
+    "colcon build --symlink-install --packages-select course_description; source install/setup.bash",
+    "xacro src/course_description/urdf/vehicle.urdf.xacro > log/pr06-vehicle.urdf",
+    "check_urdf log/pr06-vehicle.urdf",
+    "python3 -m pytest src/course_description/test/test_model.py -q",
+    "colcon test --packages-select course_description --event-handlers console_direct+",
+    "colcon test-result --test-result-base build/course_description --verbose",
+    "ros2 launch course_description display.launch.py",
+    "ros2 topic pub -r 10 /joint_states sensor_msgs/msg/JointState '{header: auto, name: [front_left_steering_joint, front_right_steering_joint, front_left_wheel_joint, front_right_wheel_joint, rear_left_wheel_joint, rear_right_wheel_joint], position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]}'",
+    "ros2 topic info /tf_static --verbose --no-daemon --spin-time 2",
+    "timeout 4s ros2 topic echo /tf_static --once --qos-durability transient_local --qos-reliability reliable",
+    "timeout 4s ros2 topic echo /tf_static --once --qos-durability volatile --qos-reliability reliable",
+    "ros2 topic info /tf --verbose --no-daemon --spin-time 2",
+    "timeout --signal=INT 7s ros2 run tf2_ros tf2_echo base_link lidar_link (до исправления; timeout только завершает непрерывный просмотр)",
+    "timeout --signal=INT 5s ros2 run tf2_ros tf2_echo base_link lidar_link (после исправления)",
+    "ros2 run tf2_tools view_frames (из log/, до и после исправления)",
+    "python3 /tmp/opencode/pr05-course/v1/tools/check_practice.py PR06 --submission ."
+  ],
+  "tests": [
+    {
+      "name": "Пять pytest-проверок модели проходят: дерево, parent и offset сенсоров, геометрия колёс при двух наборах параметров, допустимые массы и инерции; check_urdf успешен",
+      "status": "passed"
+    },
+    {
+      "name": "colcon test-result для course_description: 6 tests (5 pytest + CTest wrapper), 0 errors, 0 failures, 0 skipped",
+      "status": "passed"
+    },
+    {
+      "name": "Дефект 7c0ff95 воспроизведён: check_urdf успешен, но тест ожидаемого parent падает; tf2_echo показывает (0.56, 0, 0.76)",
+      "status": "passed"
+    },
+    {
+      "name": "После восстановления base_link тот же тест проходит, tf2_echo показывает (0.28, 0, 0.38), view_frames подтверждает дерево",
+      "status": "passed"
+    },
+    {
+      "name": "Один publisher /tf_static с RELIABLE и TRANSIENT_LOCAL; поздний transient_local reader получил три фиксированных преобразования с exit=0, volatile reader не получил историю и завершён с exit=124",
+      "status": "passed"
+    },
+    {
+      "name": "Пользователь подтвердил RViz: Fixed Frame=base_link, корпус, четыре колеса и сенсоры видны, Global Status и RobotModel OK при публикации нулевых joint_states",
+      "status": "passed"
+    }
+  ],
+  "defect": {
+    "reproducer": "После зелёного коммита 0e06052 в отдельном коммите 7c0ff95 parent lidar_joint заменён с base_link на camera_link при прежнем origin (0.28, 0, 0.38). Результаты check_urdf, pytest, tf2_echo и view_frames сохранены в defect-before.txt.",
+    "root_cause": "Origin joint выражается относительно parent. Камера уже смещена от base_link на (0.28, 0, 0.38); прежний offset лидара при новом parent добавляется повторно. Дерево остаётся связным и ацикличным, поэтому check_urdf не выявляет неверный геометрический смысл.",
+    "proof_after": "В коммите 03f30d5 восстановлен parent base_link. Тот же тест проходит, tf2_echo показывает (0.28, 0, 0.38), view_frames подтверждает прямую связь base_link→lidar_link. Результаты в defect-after.txt и model-check.txt; отдельный локальный QoS-опыт сохранён в tf-qos.txt."
+  },
+  "claims": {
+    "public_tests_passed": true,
+    "defect_reproduced": true,
+    "defect_fixed": true
+  },
+  "time": {
+    "contact_academic_hours": 0,
+    "self_study_hours": 0
+  },
+  "time_note": "Личное время студента агентом не измерялось; агентные проверки не выдаются за часы самостоятельной работы студента.",
+  "ai_used": true
+}
